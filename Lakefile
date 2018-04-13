@@ -1,0 +1,15 @@
+#|-*- mode:lisp -*-|#
+
+(push (uiop:pathname-directory-pathname *load-pathname*)
+      asdf:*central-registry*)
+(ql:quickload '(#:niko) :silent t)
+
+(uiop:define-package #:lake.user
+  (:mix #:cl
+        #:lake
+        #:utopian))
+(in-package #:lake.user)
+
+(utopian:load-tasks)
+
+(task "default" ("server"))
