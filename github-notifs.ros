@@ -1,0 +1,44 @@
+#!/bin/sh
+#|-*- mode:lisp -*-|#
+#|
+exec ros -Q -- $0 "$@"
+|#
+(progn ;;init forms
+  (ros:ensure-asdf)
+  #+quicklisp (ql:quickload '(:dexador :jonathan) :silent t)
+  )
+
+(defpackage :ros.script.github-notifs.3732696253
+  (:use :cl))
+(in-package :ros.script.github-notifs.3732696253)
+
+(defparameter *github-token* "your tokens")
+
+(defun get-notifications (token &optional since)
+  (multiple-value-bind (res status header uri ssl)
+      (dex:get (if (null since)
+                   "https://api.github.com/notifications"
+                   (format nil "~a?~a"
+                           "https://api.github.com/notifications"
+                           (quri:url-encode-params `(("since" . ,since)))))
+               :headers `(("Authorization" . ,(concatenate 'string "token " token))))
+    (declare (ignore status uri ssl))
+    (values
+     (jojo:parse res)
+     (gethash "last-modified" header)
+     (gethash "x-poll-interval" header))))
+
+(defun get-mentioned (token)
+  (multiple-value-bind (notifications last-modified poll-interval)
+      (get-notifications token)
+    (loop
+      :for n :in notifications
+      :when (member (getf n :|reason|) '("comment" "mention" "assign") :test #'string=)
+      :collect (list (getf n :|subject|)
+                     (getf n :|reason|)))))
+
+(defun main (&rest argv)
+  (declare (ignorable argv))
+  (print (first argv))
+  (print (get-mentioned (first argv))))
+;;; vim: set ft=lisp lisp:
