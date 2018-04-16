@@ -5,7 +5,7 @@ exec ros -Q -- $0 "$@"
 |#
 (progn ;;init forms
   (ros:ensure-asdf)
-  #+quicklisp (ql:quickload '(:dexador :jonathan) :silent t)
+  #+quicklisp (ql:quickload '(:dexador :jonathan :cl-ppcre) :silent t)
   )
 
 (defpackage :ros.script.github-notifs.3732696253
@@ -48,6 +48,9 @@ exec ros -Q -- $0 "$@"
                      :test #'string=)
        :collect (list (getf n :|subject|)
                       (intern (getf n :|reason|) :keyword)))))
+
+(defun parse-issue-comment (url)
+  (ppcre:scan-to-strings "/repos/([^/]+)/([^/]+)/issues/(comments/(.+$))?" url))
 
 (defun main (&rest argv)
   (declare (ignorable argv))
