@@ -34,7 +34,7 @@ exec ros -Q -- $0 "$@"
 
 (defun get-mentioned (token &optional since all)
   (multiple-value-bind (notifications last-modified poll-interval)
-      (get-notifications token (unless since since) all)
+      (get-notifications token since all)
     (declare (ignorable last-modified poll-interval))
     (loop
        :for n :in notifications
@@ -49,5 +49,5 @@ exec ros -Q -- $0 "$@"
 (defun main (&rest argv)
   (declare (ignorable argv))
   (format t "~s~%" argv)
-  (format t "~s~%" (get-mentioned (first argv) (second argv))))
+  (format t "~s~%" (get-mentioned (first argv) (second argv) (third argv))))
 ;;; vim: set ft=lisp lisp:
