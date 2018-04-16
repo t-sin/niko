@@ -33,17 +33,18 @@ exec ros -Q -- $0 "$@"
      (gethash "last-modified" header)
      (gethash "x-poll-interval" header))))
 
-(defun get-mentioned (token)
+(defun get-mentioned (token &optional since all)
   (multiple-value-bind (notifications last-modified poll-interval)
-      (get-notifications token)
+      (get-notifications token (unless since since) all)
+    (declare (ignorable last-modified poll-interval))
     (loop
-      :for n :in notifications
-      :when (member (getf n :|reason|) '("comment" "mention" "assign") :test #'string=)
-      :collect (list (getf n :|subject|)
-                     (getf n :|reason|)))))
+       :for n :in notifications
+       :when (member (getf n :|reason|) '("comment" "mention" "assign") :test #'string=)
+       :collect (list (getf n :|subject|)
+                      (getf n :|reason|)))))
 
 (defun main (&rest argv)
   (declare (ignorable argv))
-  (print (first argv))
-  (print (get-mentioned (first argv))))
+  (format t "~s~%" argv)
+  (format t "~s~%" (get-mentioned (first argv) (second argv))))
 ;;; vim: set ft=lisp lisp:
