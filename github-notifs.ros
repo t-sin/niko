@@ -43,7 +43,7 @@ exec ros -Q -- $0 "$@"
 (defun get-mentioned (token &optional since all)
   (multiple-value-bind (notifications last-modified poll-interval)
       (get-notifications token since all)
-    (declare (ignorable last-modified poll-interval))
+    (format t "~s~%" (list last-modified poll-interval))
     (loop
        :for n :in notifications
        :when (member (getf n :|reason|) '("author"  ; 自分がauthorのスレッドにコメントきたから
@@ -61,5 +61,7 @@ exec ros -Q -- $0 "$@"
 (defun main (&rest argv)
   (declare (ignorable argv))
   (format t "~s~%" argv)
-  (format t "~s~%" (get-mentioned (first argv) (second argv) (third argv))))
+  (let ((mentioned (get-mentioned (first argv) (third argv) (third argv))))
+    (format t "~s~%" mentioned)
+    (format t "~s~%" (parse-issue-comment (getf (first (second mentioned)) :|latest_comment_url|)))))
 ;;; vim: set ft=lisp lisp:
