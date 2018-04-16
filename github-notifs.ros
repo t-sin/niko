@@ -39,9 +39,13 @@ exec ros -Q -- $0 "$@"
     (declare (ignorable last-modified poll-interval))
     (loop
        :for n :in notifications
-       :when (member (getf n :|reason|) '("comment" "mention" "assign") :test #'string=)
+       :when (member (getf n :|reason|) '("author"  ; 自分がauthorのスレッドにコメントきたから
+                                          "comment"  ; 自分がスレッドにコメントしたから
+                                          "mention"  ; 明示的なメンションされたから
+                                          "assign"  ; 割り当てされたとき
+                                          :test #'string=))
        :collect (list (getf n :|subject|)
-                      (getf n :|reason|)))))
+                      (intern (getf n :|reason|) :keyword)))))
 
 (defun main (&rest argv)
   (declare (ignorable argv))
