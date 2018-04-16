@@ -15,22 +15,28 @@ exec ros -Q -- $0 "$@"
 (defparameter *github-token* "your tokens")
 
 (defun get-notifications (token &optional since all)
-  (multiple-value-bind (res status header uri ssl)
-      (dex:get (format nil "~a?~a"
-                       "https://api.github.com/notifications"
-                       (quri:url-encode-params `(,(if since
-                                                      `("since" . ,since)
-                                                      '("since" . ""))
-                                                  ,(if all
-                                                       `("all" . ,all)
-                                                       '("all" . "false")))))
-               :headers `(("Authorization" . ,(concatenate 'string "token " token))))
-    (declare (ignore status ssl))
-    (format t "~s~%" uri)
-    (values
-     (jojo:parse res)
-     (gethash "last-modified" header)
-     (gethash "x-poll-interval" header))))
+  (handler-bind
+      ((error
+        (lambda (c)
+          (format t "~s~%" c)
+          (return-from get-notifications))))
+    (multiple-value-bind (res status header uri ssl)
+        (let ((uri (format nil "~a?~a"
+                           "https://api.github.com/notifications"
+                           (quri:url-encode-params `(,(if since
+                                                          `("since" . ,since)
+                                                          '("since" . ""))
+                                                      ,(if all
+                                                           `("all" . ,all)
+                                                           '("all" . "false")))))))
+          (format t "~s~%" uri)
+          (dex:get uri
+                   :headers `(("Authorization" . ,(concatenate 'string "token " token)))))
+      (declare (ignore status ssl uri))
+      (values
+       (jojo:parse res)
+       (gethash "last-modified" header)
+       (gethash "x-poll-interval" header)))))
 
 ;;; 所属するチーム全てのメンションを知りたい
 ;;; スレッド購読して、新着のメッセージを解析か。
