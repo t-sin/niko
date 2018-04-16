@@ -14,13 +14,18 @@ exec ros -Q -- $0 "$@"
 
 (defparameter *github-token* "your tokens")
 
-(defun get-notifications (token &optional since)
+(defun get-notifications (token &optional since all)
   (multiple-value-bind (res status header uri ssl)
       (dex:get (if (null since)
                    "https://api.github.com/notifications"
                    (format nil "~a?~a"
                            "https://api.github.com/notifications"
-                           (quri:url-encode-params `(("since" . ,since)))))
+                           (quri:url-encode-params `(,(if since
+                                                          '("since" . "Time.now")
+                                                          `("since" . ,since))
+                                                      ,(if all
+                                                           '("all" . "true")
+                                                           '("all" . "false"))))))
                :headers `(("Authorization" . ,(concatenate 'string "token " token))))
     (declare (ignore status uri ssl))
     (values
