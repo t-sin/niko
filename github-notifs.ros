@@ -42,6 +42,7 @@ exec ros -Q -- $0 "$@"
                                           "comment"  ; 自分がスレッドにコメントしたから
                                           "mention"  ; 明示的なメンションされたから
                                           "assign"  ; 割り当てされたとき
+                                          "subscribed"  ; スレッド購読してたから
                                           :test #'string=))
        :collect (list (getf n :|subject|)
                       (intern (getf n :|reason|) :keyword)))))
