@@ -26,12 +26,14 @@ exec ros -Q -- $0 "$@"
                                                        '("all" . "false")))))
                :headers `(("Authorization" . ,(concatenate 'string "token " token))))
     (declare (ignore status ssl))
-    (print uri)
+    (format t "~s~%" uri)
     (values
      (jojo:parse res)
      (gethash "last-modified" header)
      (gethash "x-poll-interval" header))))
 
+;;; 所属するチーム全てのメンションを知りたい
+;;; スレッド購読して、新着のメッセージを解析か。
 (defun get-mentioned (token &optional since all)
   (multiple-value-bind (notifications last-modified poll-interval)
       (get-notifications token since all)
@@ -42,8 +44,8 @@ exec ros -Q -- $0 "$@"
                                           "comment"  ; 自分がスレッドにコメントしたから
                                           "mention"  ; 明示的なメンションされたから
                                           "assign"  ; 割り当てされたとき
-                                          "subscribed"  ; スレッド購読してたから
-                                          :test #'string=))
+                                          "subscribed")  ; スレッド購読してたから
+                     :test #'string=)
        :collect (list (getf n :|subject|)
                       (intern (getf n :|reason|) :keyword)))))
 
