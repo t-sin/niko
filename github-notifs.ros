@@ -38,6 +38,36 @@ exec ros -Q -- $0 "$@"
        (gethash "last-modified" header)
        (gethash "x-poll-interval" header)))))
 
+(defun get-issue (token owner repo id)
+  (handler-bind
+      ((error
+         (lambda (c)
+           (format t "~s~%" c))))
+    (multiple-value-bind (res status header uri ssl)
+        (let ((uri (format nil "~a/repos/~a/~a/issues/~a"
+                           "https://api.github.com"
+                           owner repo id)))
+          (format t "~s~%" uri)
+          (dex:get uri :headers `(("Authorization" . ,(concatenate 'string "token " token)))))
+      (declare (ignore header status ssl uri))
+      (values
+       (jojo:parse res)))))
+
+(defun get-issue-comment (token owner repo id)
+  (handler-bind
+      ((error
+         (lambda (c)
+           (format t "~s~%" c))))
+    (multiple-value-bind (res status header uri ssl)
+        (let ((uri (format nil "~a/repos/~a/~a/issues/comments/~a"
+                           "https://api.github.com"
+                           owner repo id)))
+          (format t "~s~%" uri)
+          (dex:get uri :headers `(("Authorization" . ,(concatenate 'string "token " token)))))
+      (declare (ignore header status ssl uri))
+      (values
+       (jojo:parse res)))))
+
 ;;; 所属するチーム全てのメンションを知りたい
 ;;; スレッド購読して、新着のメッセージを解析か。
 (defun get-mentioned (token &optional since all)
