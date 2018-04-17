@@ -102,10 +102,31 @@ exec ros -Q -- $0 "$@"
     (values issue comment-id)))
 
 
+(defun issue-body (token subject)
+  (multiple-value-bind (issue comment-id)
+      (parse-subject subject)
+    (destructuring-bind (owner repo issue-id) issue
+      (getf (if comment-id
+                (get-issue-comment token owner repo comment-id)
+                (get-issue token owner repo issue-id))
+            :|body|))))
+
+(defun all-mentions-from (text)
+  (ppcre:all-matches-as-strings "@[^ ]+" text))
+
+(defun all-mentions (token nots)
+  (remove-duplicates
+   (loop
+     :for n :in nots
+     :nconc (all-mentions-from (issue-body token (first n))))
+   :test #'string=))
+
 (defun main (&rest argv)
   (declare (ignorable argv))
   (format t "~s~%" argv)
-  (let ((mentioned (get-mentioned (first argv) (third argv) (third argv))))
-    (format t "~s~%" mentioned)
-    (format t "~s~%" (parse-issue-comment (getf (first (second mentioned)) :|latest_comment_url|)))))
+  (let* ((token (first argv))
+         (since (second argv))
+         (all (third argv))
+         (mentioned (get-mentioned token since all)))
+    (format t "mentioned: ~s~%" (all-mentions token mentioned))))
 ;;; vim: set ft=lisp lisp:
