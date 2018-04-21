@@ -1,0 +1,40 @@
+#!/bin/sh
+#|-*- mode:lisp -*-|#
+#|
+exec ros -Q -- $0 "$@"
+|#
+(progn ;;init forms
+  (ros:ensure-asdf)
+  #+quicklisp (ql:quickload '(:dexador :jonathan) :silent t)
+  )
+
+(defpackage :ros.script.slack-bot.3733286272
+  (:use :cl))
+(in-package :ros.script.slack-bot.3733286272)
+
+(defun channel-id (token channel-name)
+  (let ((ret (dex:get "https://slack.com/api/channels.list"
+                      :headers `(("Authorization" . ,(format nil "Bearer ~a" token))))))
+    (getf (find channel-name (getf (jojo:parse ret) :|channels|)
+                :key (lambda (ch) (getf ch :|name|))
+                :test #'string=)
+          :|id|)))
+
+(defun user-ids (token usernames)
+  (let ((ret (dex:get "https://slack.com/api/users.list"
+                      :headers `(("Authorization" . ,(format nil "Bearer ~a" token))))))
+    (mapcar (lambda (user) (getf user :|id|))
+            (remove-if-not (lambda (user) (member (getf user :|name|) usernames :test #'string=))
+                           (getf (jojo:parse ret) :|members|)))))
+
+(defun post-message (token channel text &optional (mention-to nil))
+  (flet ((mention-str (text) (format nil "~{<@~a> ~}~a" mention-to text)))
+    (let ((ret (dex:post "https://slack.com/api/chat.postMessage"
+                         :content (jojo:to-json (list :|channel| channel :|text| (mention-str text)))
+                         :headers `(("Content-Type" . "application/json")
+                                    ("Authorization" . ,(format nil "Bearer ~a" token))))))
+      (jojo:parse ret))))
+
+(defun main (&rest argv)
+  (declare (ignorable argv)))
+;;; vim: set ft=lisp lisp:
