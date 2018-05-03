@@ -12,3 +12,7 @@
 ;; Routing rules
 
 (route :GET "/" "root:index")
+
+(route :GET "/users/lists" "users:lists")
+(route :GET "/users/add" "users:add")
+(route :POST "/users/add" "users:add*")
