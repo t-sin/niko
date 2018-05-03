@@ -2,6 +2,11 @@
 {% block title %}Welcome to Utopian{% endblock %}
 {% block content %}
 <div id="main">
-  Welcome to Utopian!
+  <h1>Niko</h1>
+
+  <ul>
+    <li><a href="/users/add">Adds user</a></li>
+    <li><a href="/users/lists">Lists users</a></li>
+  </ul>
 </div>
 {% endblock %}
