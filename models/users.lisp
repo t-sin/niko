@@ -3,7 +3,9 @@
         #:mito)
   (:export #:users
            #:users-github-id
-           #:users-slack-id))
+           #:users-github-name
+           #:users-slack-id
+           #:users-slack-name))
 (in-package #:niko/models/users)
 
 (defclass users ()
