@@ -10,7 +10,13 @@
   ((github-id :col-type :string
               :initarg :github-id
               :accessor users-github-id)
+   (github-name :col-type :string
+                :initarg :github-name
+                :accessor users-github-name)
    (slack-id :col-type :string
              :initarg :slack-id
-             :accessor users-slack-id))
+             :accessor users-slack-id)
+   (slack-name :col-type :string
+               :initarg :slack-name
+               :accessor users-slack-name))
   (:metaclass dao-table-class))

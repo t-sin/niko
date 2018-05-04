@@ -1,3 +1,4 @@
+ALTER TABLE "users" RENAME TO "users873";
 CREATE TABLE "users" (
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "github_id" STRING NOT NULL,
@@ -7,8 +8,4 @@ CREATE TABLE "users" (
     "created_at" TIMESTAMP,
     "updated_at" TIMESTAMP
 );
-
-CREATE TABLE IF NOT EXISTS "schema_migrations" (
-    "version" VARCHAR(255) PRIMARY KEY
-);
-INSERT INTO schema_migrations (version) VALUES ('20180504164011');
+INSERT INTO "users" ("created_at", "github_id", "id", "slack_id", "updated_at") SELECT "created_at", "github_id", "id", "slack_id", "updated_at" FROM "users873";
