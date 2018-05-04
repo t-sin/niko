@@ -14,7 +14,8 @@
 
 (defun lists (params)
   (declare (ignore params))
-  (render nil :template "users/lists.html.dj"))
+  (render (list :users (mito:select-dao 'users))
+          :template "users/lists.html.dj"))
 
 (defun add (params)
   (declare (ignore params))

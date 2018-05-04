@@ -3,4 +3,7 @@
 {% block content %}
 <h1>users/lists</h1>
 <p>Find me in views/users/lists.html.dj</p>
+
+{{ users }}
+
 {% endblock %}
