@@ -2,7 +2,8 @@
   (:use #:cl)
   (:export #:api/notifications
            #:api/issue
-           #:api/issue-comment))
+           #:api/issue-comment
+           #:api/user))
 (in-package #:niko/lib/github)
 
 ;;;; APIs
@@ -54,6 +55,19 @@
           (dex:get uri :headers `(("Authorization" . ,(format nil "token ~a" (uiop:getenv "GITHUB_TOKEN"))))))
       (declare (ignore header status ssl uri))
       (jojo:parse res))))
+
+(defun api/user (username)
+  (handler-bind
+      ((error
+         (lambda (c)
+           (format t "~s~%" c))))
+    (multiple-value-bind (res status header uri ssl)
+        (let ((uri (format nil "~a/users/~a" "https://api.github.com" username)))
+          (dex:get uri :headers `(("Authorization" . ,(format nil "token ~a" (uiop:getenv "GITHUB_TOKEN"))))))
+      (declare (ignore header status ssl uri))
+      (let ((parsed (jojo:parse res)))
+        (values (getf parsed :|id|)
+                (getf parsed :|login|))))))
 
 
 ;;;; utils
