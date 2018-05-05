@@ -15,7 +15,7 @@
   {% for user in users %}
   <tr>
     <td>{{ user.id }}</td>
-    <td>{{ user.github-name }}</td>
+    <td><a href="https://github.com/{{ user.github-name }}">{{ user.github-name }}</a></td>
     <td>{{ user.github-id }}</td>
     <td>{{ user.slack-name }}</td>
     <td>{{ user.slack-id }}</td>
