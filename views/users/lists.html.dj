@@ -1,8 +1,8 @@
 {% extends "layouts/default.html.dj" %}
 {% block title %}niko - users{% endblock %}
 {% block content %}
-<h1>user list</h1>
-<p>Find me in views/users/lists.html.dj</p>
+
+<h1>GitHub-Slack user correspondence</h1>
 
 <table>
   <tr>
