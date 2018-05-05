@@ -1,9 +1,30 @@
 {% extends "layouts/default.html.dj" %}
 {% block title %}niko - users{% endblock %}
 {% block content %}
-<h1>users/lists</h1>
+<h1>user list</h1>
 <p>Find me in views/users/lists.html.dj</p>
 
-{{ users }}
+<table>
+  <tr>
+    <th>id</th>
+    <th>github-name</th>
+    <th>github-id</th>
+    <th>slack-name</th>
+    <th>slack-id</th>
+  </tr>
+  {% for user in users %}
+  <tr>
+    <td>{{ user.id }}</td>
+    <td>{{ user.github-name }}</td>
+    <td>{{ user.github-id }}</td>
+    <td>{{ user.slack-name }}</td>
+    <td>{{ user.slack-id }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<hr>
+
+<a href="/">index</a>
 
 {% endblock %}

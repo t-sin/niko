@@ -12,9 +12,18 @@
   (:export #:lists))
 (in-package #:niko/controllers/users)
 
+(defun to-plist (users)
+  (loop
+    :for u :in users
+    :collect (list :id (mito:object-id u)
+                   :github-id (users-github-id u)
+                   :github-name (users-github-name u)
+                   :slack-id (users-slack-id u)
+                   :slack-name (users-slack-name u))))
+
 (defun lists (params)
   (declare (ignore params))
-  (render (list :users (mito:select-dao 'users))
+  (render (list :users (to-plist (mito:select-dao 'users)))
           :template "users/lists.html.dj"))
 
 (defun add (params)
