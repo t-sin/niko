@@ -9,6 +9,8 @@
                 #:users-slack-name)
   (:import-from #:niko/lib/github
                 #:api/user)
+  (:import-from #:niko/lib/slack
+                #:api/user-ids)
   (:export #:lists))
 (in-package #:niko/controllers/users)
 
@@ -41,8 +43,9 @@
       (setf (users-github-name user) name))
 
     ;;; TODO: slack API
-    (setf (users-slack-id user) "hoge-id")
-    (setf (users-slack-name user) "hoge-user")
+    (let ((user-ids (api/user-ids (list slack-name))))
+      (setf (users-slack-id user) (first user-ids))
+      (setf (users-slack-name user) slack-name))
 
     (mito:save-dao user)
     (render (list :users (mito:select-dao 'users))
