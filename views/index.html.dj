@@ -1,8 +1,8 @@
 {% extends "layouts/default.html.dj" %}
-{% block title %}Welcome to Utopian{% endblock %}
+{% block title %}Niko admin{% endblock %}
 {% block content %}
 <div id="main">
-  <h1>Niko</h1>
+  <h1>Niko admin</h1>
 
   <ul>
     <li><a href="/users/add">Adds user</a></li>
