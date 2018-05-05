@@ -1,7 +1,9 @@
 {% extends "layouts/default.html.dj" %}
 {% block title %}niko - users{% endblock %}
 {% block content %}
+
 <h1>users/add</h1>
+
 <form action="" method="post">
   <input type="hidden" name="_csrf_token" value="{% csrf-token %}">
   <div>
@@ -14,4 +16,9 @@
   </div>
   <button>submit</button>
 </form>
+
+<hr>
+
+<a href="/">index</a>
+
 {% endblock %}
