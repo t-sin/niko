@@ -48,5 +48,4 @@
       (setf (users-slack-name user) slack-name))
 
     (mito:save-dao user)
-    (render (list :users (mito:select-dao 'users))
-            :template "users/lists.html.dj")))
+    (redirect-to "/users/lists")))
