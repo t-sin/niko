@@ -61,3 +61,14 @@
               (let ((mentions (all-mentions-from issue-body)))
                 (when mentions
                  (list issue-url mentions))))))
+
+
+(defun watch ()
+  (loop
+    (multiple-value-bind (response last-modified poll-interval)
+        (api/notifications)
+      (let ((last-modified (universal-to-timestamp (parse-date-time last-modified)))
+            (nots (notifications-with-mentions response)))
+        (format t "~s~%" nots)
+        (format t "last-modified: ~s" last-modified)
+        (sleep poll-interval)))))
