@@ -6,6 +6,8 @@
   :description ""
   :depends-on ("dexador"
                "jonathan"
+               "local-time"
+               "cl-date-time-parser"
                "niko/boot"
                "cl-syntax-annot")
   :in-order-to ((test-op (test-op "niko/tests"))))
