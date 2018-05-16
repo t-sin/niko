@@ -2,3 +2,8 @@ git utopian https://github.com/fukamachi/utopian
 ql lake :latest
 git rove https://github.com/fukamachi/rove
 git cl-dbi https://github.com/fukamachi/cl-dbi
+
+ql dexador :latest
+ql jonathan :latest
+ql local-time :latest
+ql cl-date-time-parser :latest
