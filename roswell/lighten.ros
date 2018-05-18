@@ -5,7 +5,7 @@ exec ros -Q -- $0 "$@"
 |#
 (progn ;;init forms
   (ros:ensure-asdf)
-  #+quicklisp (ql:quickload '(:clack) :silent t)
+  #+quicklisp (ql:quickload '(:niko) :silent t)
   )
 
 (defpackage :ros.script.run.3735452268
@@ -15,7 +15,7 @@ exec ros -Q -- $0 "$@"
 (defun main (&rest argv)
   (declare (ignorable argv))
   ;;; TODO: start a watching thread.
-  (clack:clackup (merge-pathnames #P"app.lisp" (asdf:system-source-directory :niko)))
+  (niko:start)
   (format t "~%   --- My burden is light.~%")
   (loop (sleep 1)))
 ;;; vim: set ft=lisp lisp:
