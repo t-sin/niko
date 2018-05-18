@@ -6,6 +6,7 @@
                 #:api/issue-comment
                 #:api/user)
   (:import-from #:local-time
+                #:timestamp<
                 #:universal-to-timestamp)
   (:import-from #:cl-date-time-parser
                 #:parse-date-time))
@@ -74,19 +75,24 @@
 
 (defun watch (&optional last-modified)
   (multiple-value-bind (response %last-modified poll-interval)
-      (api/notifications :since last-modified)
-    (let ((%last-modified (universal-to-timestamp (parse-date-time %last-modified))))
-      (if (or (null last-modified) (local-time:timestamp< last-modified %last-modified))
-          (let* ((nots (notifications-with-mentions response))
-                 (mentions (all-mentions nots)))
-            (print mentions)
-            (print "do posting")))
-      (values %last-modified poll-interval))))
+      (if last-modified
+          (api/notifications :since last-modified)
+          (api/notifications))
+    (if (or (null last-modified)
+            (timestamp< last-modified
+                        (universal-to-timestamp (parse-date-time %last-modified))))
+        (let* ((nots (notifications-with-mentions response))
+               (mentions (all-mentions nots)))
+          (format t "~s~%"  mentions)
+          (format t "do posting...~%"))
+        (format t "nothing to notify~%"))
+    (values %last-modified poll-interval)))
 
 (defun watch-forever ()
   (loop
-    :with  last-modified := nil
+    :with last-modified := nil
+    :do (format t "retrieving notifications~%")
     :do (multiple-value-bind (%last-modified poll-interval)
             (watch last-modified)
-          (setf last-modified %last-modified)
+          (setf last-modified (local-time:format-timestring nil %last-modified))
           (sleep poll-interval))))
