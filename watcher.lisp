@@ -33,22 +33,31 @@
                          (repo (aref strs 1))
                          (issue-id (aref strs 2)))
                      (list owner repo issue-id)))))
+        (pull (multiple-value-bind (match strs)
+                  (ppcre:scan-to-strings "/repos/([^/]+)/([^/]+)/pulls/(.+$)"
+                                         (getf subject :|url|))
+                (when match
+                   (let ((owner (aref strs 0))
+                         (repo (aref strs 1))
+                         (pull-id (aref strs 2)))
+                     (list owner repo pull-id)))))
         (comment-id (multiple-value-bind (match strs)
                         (ppcre:scan-to-strings "/repos/[^/]+/[^/]+/issues/comments/(.+$)"
                                                (getf subject :|latest_comment_url|))
                       (when match
                         (aref strs 0)))))
-    (values issue comment-id)))
+    (values issue pull comment-id)))
 
 (defun retrieve-issue-body (subject)
-  (multiple-value-bind (issue comment-id)
+  (multiple-value-bind (issue pull comment-id)
       (parse-subject subject)
-    (destructuring-bind (owner repo issue-id) issue
-      (let ((issue (if comment-id
-                       (api/issue-comment owner repo comment-id)
-                       (api/issue owner repo issue-id))))
-        (values (getf issue :|url|)
-                (getf issue :|body|))))))
+    (when (or issue pull)
+      (destructuring-bind (owner repo issue-id) (or issue pull)
+        (let ((issue (if comment-id
+                         (api/issue-comment owner repo comment-id)
+                         (api/issue owner repo issue-id))))
+          (values (getf issue :|url|)
+                  (getf issue :|body|)))))))
 
 (defun all-mentions-from (text)
   (ppcre:all-matches-as-strings "@[^ ]+" text))
