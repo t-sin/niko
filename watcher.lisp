@@ -72,12 +72,21 @@
                  (list issue-url mentions))))))
 
 
-(defun watch ()
+(defun watch (&optional last-modified)
+  (multiple-value-bind (response %last-modified poll-interval)
+      (api/notifications :since last-modified)
+    (let ((%last-modified (universal-to-timestamp (parse-date-time %last-modified))))
+      (if (or (null last-modified) (local-time:timestamp< last-modified %last-modified))
+          (let* ((nots (notifications-with-mentions response))
+                 (mentions (all-mentions nots)))
+            (print mentions)
+            (print "do posting")))
+      (values %last-modified poll-interval))))
+
+(defun watch-forever ()
   (loop
-    (multiple-value-bind (response last-modified poll-interval)
-        (api/notifications)
-      (let ((last-modified (universal-to-timestamp (parse-date-time last-modified)))
-            (nots (notifications-with-mentions response)))
-        (format t "~s~%" nots)
-        (format t "last-modified: ~s" last-modified)
-        (sleep poll-interval)))))
+    :with  last-modified := nil
+    :do (multiple-value-bind (%last-modified poll-interval)
+            (watch last-modified)
+          (setf last-modified %last-modified)
+          (sleep poll-interval))))
