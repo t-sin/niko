@@ -4,7 +4,8 @@
   (:import-from #:clack)
   (:import-from #:clack-errors)
   (:use-reexport #:niko/config/application
-                 #:niko/config/routes)
+                 #:niko/config/routes
+                 #:niko/watcher)
   (:export #:start
            #:stop))
 (in-package #:niko)
