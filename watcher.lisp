@@ -9,7 +9,9 @@
                 #:timestamp<
                 #:universal-to-timestamp)
   (:import-from #:cl-date-time-parser
-                #:parse-date-time))
+                #:parse-date-time)
+  (:export #:watch
+           #:watch-forever))
 (in-package #:niko/watcher)
 
 
