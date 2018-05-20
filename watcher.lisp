@@ -6,6 +6,8 @@
                 #:api/issue-comment
                 #:api/user)
   (:import-from #:local-time
+                #:format-timestring
+                #:now
                 #:timestamp<
                 #:universal-to-timestamp)
   (:import-from #:cl-date-time-parser
@@ -80,21 +82,31 @@
       (if last-modified
           (api/notifications :since last-modified)
           (api/notifications))
-    (if (or (null last-modified)
-            (timestamp< last-modified
-                        (universal-to-timestamp (parse-date-time %last-modified))))
+    (format t "notification API response: ~s~%" (list response %last-modified poll-interval))
+    (if (and (not (null %last-modified))
+             (setf %last-modified (universal-to-timestamp (parse-date-time %last-modified)))
+             (or (null last-modified) (timestamp< last-modified %last-modified)))
         (let* ((nots (notifications-with-mentions response))
                (mentions (all-mentions nots)))
           (format t "~s~%"  mentions)
-          (format t "do posting...~%"))
-        (format t "nothing to notify~%"))
-    (values %last-modified poll-interval)))
+          (format t ";;; posting...~%")
+          (values %last-modified poll-interval))
+        (progn
+          (format t ";;; nothing to notify~%")
+          (values nil 30)))))
+
+(defun format-timestring-as-github-format (ts)
+  (local-time:format-timestring nil ts
+                                :format '(:year #\- (:month 2 #\0) #\- (:day 2 #\0) #\T
+                                          (:hour 2 #\0) #\: (:min 2 #\0) #\: (:sec 2 #\0) #\Z)))
 
 (defun watch-forever ()
   (loop
     :with last-modified := nil
-    :do (format t "retrieving notifications~%")
+    :do (format t ";;; retrieving notifications~%")
     :do (multiple-value-bind (%last-modified poll-interval)
             (watch last-modified)
-          (setf last-modified (local-time:format-timestring nil %last-modified))
+          (if %last-modified
+              (setf last-modified (format-timestring-as-github-format %last-modified))
+              (setf last-modified (format-timestring-as-github-format (now))))
           (sleep poll-interval))))
