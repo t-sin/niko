@@ -15,7 +15,8 @@ exec ros -Q -- $0 "$@"
 (defun main (&rest argv)
   (declare (ignorable argv))
   ;;; TODO: start a watching thread.
-  (niko:start)
   (format t "~%   --- My burden is light.~%")
+  (niko:start)
+  (niko:watch-forever)
   (loop (sleep 1)))
 ;;; vim: set ft=lisp lisp:
