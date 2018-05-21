@@ -80,7 +80,7 @@
 (defun watch (&optional last-modified)
   (multiple-value-bind (response %last-modified poll-interval)
       (if last-modified
-          (api/notifications :since last-modified)
+          (api/notifications last-modified)
           (api/notifications))
     (format t "notification API response: ~s~%" (list response %last-modified poll-interval))
     (if (and (not (null %last-modified))
