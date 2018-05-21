@@ -7,23 +7,18 @@
 (in-package #:niko/lib/github)
 
 ;;;; APIs
-(defun api/notifications (&optional since all)
+(defun api/notifications (&optional since)
   (handler-bind
       ((error
         (lambda (c)
           (format t "~s~%" c)
-          (return-from api/notifications))))
+)))
     (multiple-value-bind (res status header uri ssl)
-        (let ((uri (format nil "~a?~a"
-                           "https://api.github.com/notifications"
-                           (quri:url-encode-params `(,(if since
-                                                          `("since" . ,since)
-                                                          '("since" . ""))
-                                                      ,(if all
-                                                           `("all" . ,all)
-                                                           '("all" . "false")))))))
+        (let ((uri "https://api.github.com/notifications"))
           (dex:get uri
-                   :headers `(("Authorization" . ,(format nil "token ~a" (uiop:getenv "GITHUB_TOKEN"))))))
+                   :headers `(("Authorization" . ,(format nil "token ~a" (uiop:getenv "GITHUB_TOKEN")))
+                              ,(when since
+                                 (cons "If-Modifed-Since"  since)))))
       (declare (ignore status ssl uri))
       (values
        (jojo:parse res)
