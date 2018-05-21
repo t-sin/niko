@@ -14,7 +14,8 @@
           (format t "~s~%" c)
 )))
     (multiple-value-bind (res status header uri ssl)
-        (let ((uri "https://api.github.com/notifications"))
+        (let ((uri (format nil "https://api.github.com/notifications?~a"
+                           (quri:url-encode-params '(("all" . "true"))))))
           (dex:get uri
                    :headers `(("Authorization" . ,(format nil "token ~a" (uiop:getenv "GITHUB_TOKEN")))
                               ,(when since
