@@ -77,12 +77,14 @@
                  (list issue-url mentions))))))
 
 
+(defun format-timestring-as-github-format (ts)
+  (local-time:format-timestring nil ts :format local-time:+rfc-1123-format+))
+
 (defun watch (&optional last-modified)
   (multiple-value-bind (response %last-modified poll-interval)
       (if last-modified
-          (api/notifications last-modified)
+          (api/notifications (format-timestring-as-github-format last-modified))
           (api/notifications))
-    (format t "notification API response: ~s~%" (list response %last-modified poll-interval))
     (if (and (not (null %last-modified))
              (setf %last-modified (universal-to-timestamp (parse-date-time %last-modified)))
              (or (null last-modified) (timestamp< last-modified %last-modified)))
@@ -93,20 +95,15 @@
           (values %last-modified poll-interval))
         (progn
           (format t ";;; nothing to notify~%")
-          (values nil 30)))))
+          (values nil poll-interval)))))
 
-(defun format-timestring-as-github-format (ts)
-  (local-time:format-timestring nil ts
-                                :format '(:year #\- (:month 2 #\0) #\- (:day 2 #\0) #\T
-                                          (:hour 2 #\0) #\: (:min 2 #\0) #\: (:sec 2 #\0) #\Z)))
 
 (defun watch-forever ()
   (loop
     :with last-modified := nil
-    :do (format t ";;; retrieving notifications~%")
     :do (multiple-value-bind (%last-modified poll-interval)
             (watch last-modified)
           (if %last-modified
-              (setf last-modified (format-timestring-as-github-format %last-modified))
-              (setf last-modified (format-timestring-as-github-format (now))))
+              (setf last-modified %last-modified)
+              (setf last-modified (now)))
           (sleep poll-interval))))
