@@ -105,5 +105,6 @@
             (watch last-modified)
           (if %last-modified
               (setf last-modified %last-modified)
-              (setf last-modified (now)))
+              (unless last-modified
+                (setf last-modified (now))))
           (sleep poll-interval))))
