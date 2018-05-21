@@ -77,13 +77,11 @@
                  (list issue-url mentions))))))
 
 
-(defun format-timestring-as-github-format (ts)
-  (local-time:format-timestring nil ts :format local-time:+rfc-1123-format+))
-
 (defun watch (&optional last-modified)
   (multiple-value-bind (response %last-modified poll-interval)
       (if last-modified
-          (api/notifications (format-timestring-as-github-format last-modified))
+          (api/notifications (format-timestring nil last-modified
+                                                :format local-time:+rfc-1123-format+))
           (api/notifications))
     (if (and (not (null %last-modified))
              (setf %last-modified (universal-to-timestamp (parse-date-time %last-modified)))
