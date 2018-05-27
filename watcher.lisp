@@ -104,11 +104,7 @@
 
 (defun watch-forever ()
   (loop
-    :with last-modified := nil
-    :do (multiple-value-bind (%last-modified poll-interval)
-            (watch last-modified)
-          (if %last-modified
-              (setf last-modified %last-modified)
-              (unless last-modified
-                (setf last-modified (now))))
+    :with last-checked := (now)
+    :do (let ((poll-interval (watch last-checked)))
+          (setf last-checked (local-time:timestamp- (now) 1 :minute))
           (sleep poll-interval))))
