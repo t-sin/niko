@@ -15,11 +15,11 @@
 )))
     (multiple-value-bind (res status header uri ssl)
         (let ((uri (format nil "https://api.github.com/notifications?~a"
-                           (quri:url-encode-params '(("all" . "true"))))))
+                           (quri:url-encode-params `(("all" . "true")
+                                                     ,@(when since
+                                                         (list (cons "since" since))))))))
           (dex:get uri
-                   :headers `(("Authorization" . ,(format nil "token ~a" (uiop:getenv "GITHUB_TOKEN")))
-                              ,(when since
-                                 (cons "If-Modifed-Since"  since)))))
+                   :headers `(("Authorization" . ,(format nil "token ~a" (uiop:getenv "GITHUB_TOKEN"))))))
       (declare (ignore status ssl uri))
       (values
        (jojo:parse res)
