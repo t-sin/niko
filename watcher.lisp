@@ -77,29 +77,33 @@
                  (list issue-url mentions))))))
 
 
-(defun watch (&optional last-modified)
-  (multiple-value-bind (response %last-modified poll-interval)
-      (if last-modified
-          (api/notifications (format-timestring nil last-modified
-                                                :format local-time:+rfc-1123-format+))
 (defun format-ts (timestamp)
   (format-timestring nil timestamp
                      :format '((:year 4 0) #\- (:month 2 #\0) #\- (:day 2 #\0) #\T
                                (:hour 2 #\0) #\: (:min 2 #\0) #\: (:sec 2 #\0) #\Z)
                      :timezone local-time:+utc-zone+))
 
+(defun watch (&optional since)
+  (multiple-value-bind (response last-modified poll-interval)
+      (if since
+          (api/notifications (format-ts since))
           (api/notifications))
-    (if (and (not (null %last-modified))
-             (setf %last-modified (universal-to-timestamp (parse-date-time %last-modified)))
-             (or (null last-modified) (timestamp< last-modified %last-modified)))
+    (format t "notifications:~%~s~%"
+            (mapcar (lambda (n) (list (getf n :|reason|)
+                                      (getf n :|created_at|)
+                                      (getf n :|subject|)))
+                    response))
+    (if (and (not (null last-modified))
+             (setf last-modified (universal-to-timestamp (parse-date-time last-modified)))
+             (or (null since) (timestamp< since last-modified)))
         (let* ((nots (notifications-with-mentions response))
                (mentions (all-mentions nots)))
           (format t "~s~%"  mentions)
           (format t ";;; posting...~%")
-          (values %last-modified poll-interval))
+          20)
         (progn
           (format t ";;; nothing to notify~%")
-          (values nil poll-interval)))))
+          20))))
 
 
 (defun watch-forever ()
