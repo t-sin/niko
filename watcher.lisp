@@ -82,6 +82,12 @@
       (if last-modified
           (api/notifications (format-timestring nil last-modified
                                                 :format local-time:+rfc-1123-format+))
+(defun format-ts (timestamp)
+  (format-timestring nil timestamp
+                     :format '((:year 4 0) #\- (:month 2 #\0) #\- (:day 2 #\0) #\T
+                               (:hour 2 #\0) #\: (:min 2 #\0) #\: (:sec 2 #\0) #\Z)
+                     :timezone local-time:+utc-zone+))
+
           (api/notifications))
     (if (and (not (null %last-modified))
              (setf %last-modified (universal-to-timestamp (parse-date-time %last-modified)))
