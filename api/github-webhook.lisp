@@ -32,8 +32,6 @@
 (defun handle-pull-request (env)
   (format t "check if assined~%"))
 
-;;; issue comments
-
 (defun handle-issue-comment (env)
   (let* ((payload (parse (cdr (assoc "payload" env :test #'string=))))
          (issue (getf payload :|issue|))
@@ -43,7 +41,7 @@
          (mentioned-slack-ids (to-slack-user-id mentioned)))
     (when mentioned-slack-ids
       (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
-                        (format nil "are mentioned on the issue `~a`~%~a"
+                        (format nil "are mentioned on the issue comment `~a`~%~a"
                                 (getf issue :|title|)
                                 (getf comment :|html_url|))
                         mentioned-slack-ids))
