@@ -5,6 +5,9 @@
                 #:api/channel-id
                 #:api/user-ids
                 #:api/post-message)
+  (:import-from #:niko/models/users
+                #:users
+                #:users-slack-id)
   (:import-from #:jonathan
                 #:parse)
   (:export #:webhook))
@@ -15,9 +18,9 @@
           (ppcre:all-matches-as-strings "@[^ ]+" text)))
 
 (defun to-slack-user-id (github-usernames)
-  (let ((users (mito:select-dao 'niko/models/users:users
+  (let ((users (mito:select-dao 'users
                  (sxql:where (:in :github-name github-usernames)))))
-    (mapcar #'niko/models/users:users-slack-id
+    (mapcar #'users-slack-id
             users)))
 
 (defun handle-issues (env)
