@@ -8,7 +8,6 @@
   {% else %}
   <link rel="stylesheet" type="text/css" media="screen" href="/assets/style.css">
   {% endifequal %}
-  <meta content="{% csrf-token %}" name="csrf-token">
 </head>
 <body>
   {% block content %}{% endblock %}

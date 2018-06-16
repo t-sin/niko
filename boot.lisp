@@ -11,6 +11,10 @@
 
 (defvar *handler*)
 
+;; disables CSRF middleware to adds API
+(fmakunbound 'djula.tag-compilers::csrf-token)
+(fmakunbound 'djula.tag-compilers::csrf-html-tag)
+
 (defun start (&rest args &key server port debug &allow-other-keys)
   (declare (ignore server port debug))
   (when (boundp '*handler*)

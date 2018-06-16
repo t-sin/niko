@@ -5,7 +5,6 @@
 <h1>Adding GitHub-Slack user correspondence</h1>
 
 <form action="" method="post">
-  <input type="hidden" name="_csrf_token" value="{% csrf-token %}">
   <div>
     <label for="github-username">github username</label>
     <input name="github-username">
