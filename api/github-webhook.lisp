@@ -46,11 +46,12 @@
                         mentioned))))
 
 (defun webhook (env)
-  (string-case
-      ((gethash "x-github-event"
-                (getf (lack.request:request-env utopian:*request*) :headers)))
-    ("ping" "hello GitHub!")
-    ("issues" (handle-issues env))
-    ("pull_request" (handle-pull-request env))
-    ("issue_comment" (handle-issue-comment env))
-    (t "do nothing anymore")))
+  (let ((event-type (gethash "x-github-event"
+                             (getf (lack.request:request-env utopian:*request*) :headers))))
+    (when (stringp event-type)
+      (string-case (event-type)
+        ("ping" "hello GitHub!")
+        ("issues" (handle-issues env))
+        ("pull_request" (handle-pull-request env))
+        ("issue_comment" (handle-issue-comment env))
+        (t (format t "do nothing anymore~%"))))))
