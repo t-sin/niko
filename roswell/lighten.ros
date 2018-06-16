@@ -17,6 +17,5 @@ exec ros -Q -- $0 "$@"
   ;;; TODO: start a watching thread.
   (format t "~%   --- My burden is light.~%")
   (niko:start)
-  (niko:watch-forever)
   (loop (sleep 1)))
 ;;; vim: set ft=lisp lisp:
