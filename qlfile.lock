@@ -1,13 +1,13 @@
 ("quicklisp" .
  (:class qlot.source.ql:source-ql-all
   :initargs (:project-name "quicklisp" :%version :latest)
-  :version "2018-03-28"))
+  :version "2018-04-30"))
 ("utopian" .
  (:class qlot.source.git:source-git
   :initargs (:project-name "utopian" :remote-url "https://github.com/fukamachi/utopian")
-  :version "git-9a515ba23e87326a4c5ad6a503c25ee4adf44ebc"
+  :version "git-5f397ccc7593e61314f80b678e40d4fbb45c545c"
   :remote-url "https://github.com/fukamachi/utopian"
-  :ref "9a515ba23e87326a4c5ad6a503c25ee4adf44ebc"))
+  :ref "5f397ccc7593e61314f80b678e40d4fbb45c545c"))
 ("lake" .
  (:class qlot.source.ql:source-ql
   :initargs (:project-name "lake" :%version :latest)
@@ -15,12 +15,32 @@
 ("rove" .
  (:class qlot.source.git:source-git
   :initargs (:project-name "rove" :remote-url "https://github.com/fukamachi/rove")
-  :version "git-f3393cb1f6fb26db3defa5b956f4e982b165ef6c"
+  :version "git-93fac76c319b21ae84713411a2b8d73e3efd2d53"
   :remote-url "https://github.com/fukamachi/rove"
-  :ref "f3393cb1f6fb26db3defa5b956f4e982b165ef6c"))
+  :ref "93fac76c319b21ae84713411a2b8d73e3efd2d53"))
 ("cl-dbi" .
  (:class qlot.source.git:source-git
   :initargs (:project-name "cl-dbi" :remote-url "https://github.com/fukamachi/cl-dbi")
   :version "git-9691a6a5f8e798c383e289880c17222520db121d"
   :remote-url "https://github.com/fukamachi/cl-dbi"
   :ref "9691a6a5f8e798c383e289880c17222520db121d"))
+("dexador" .
+ (:class qlot.source.ql:source-ql
+  :initargs (:project-name "dexador" :%version :latest)
+  :version "ql-2018-04-30"))
+("jonathan" .
+ (:class qlot.source.ql:source-ql
+  :initargs (:project-name "jonathan" :%version :latest)
+  :version "ql-2018-04-30"))
+("local-time" .
+ (:class qlot.source.ql:source-ql
+  :initargs (:project-name "local-time" :%version :latest)
+  :version "ql-2018-04-30"))
+("cl-date-time-parser" .
+ (:class qlot.source.ql:source-ql
+  :initargs (:project-name "cl-date-time-parser" :%version :latest)
+  :version "ql-2018-04-30"))
+("string-case" .
+ (:class qlot.source.ql:source-ql
+  :initargs (:project-name "string-case" :%version :latest)
+  :version "ql-2018-04-30"))
