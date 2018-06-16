@@ -23,11 +23,17 @@
 (defun handle-issues (env)
   (format t "check if assined~%~s~%" env)
   (let* ((payload (parse (cdr (assoc "payload" env :test #'string=))))
-         (issue (getf payload :|issue|)))
-    (format t "issue title: ~s~%" (getf issue :|title|))
-    (format t "issue url: ~s~%" (getf issue :|html_url|))
-    (format t "mentioned users: ~s~%"
-            (all-mentions-from (getf issue :|body|)))))
+         (issue (getf payload :|issue|))
+         (mentioned (remove-duplicates (all-mentions-from (getf issue :|body|))
+                                       :test #'string=))
+         (mentioned-slack-ids (to-slack-user-id mentioned)))
+    (when mentioned-slack-ids
+      (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
+                        (format nil "are mentioned on the issue `~a`~%~a"
+                                (getf issue :|title|)
+                                (getf issue :|html_url|))
+                        mentioned-slack-ids))
+    "handled issue"))
 
 (defun handle-pull-request (env)
   (format t "check if assined~%"))
