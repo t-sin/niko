@@ -7,3 +7,4 @@ ql dexador :latest
 ql jonathan :latest
 ql local-time :latest
 ql cl-date-time-parser :latest
+ql string-case :latest
