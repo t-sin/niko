@@ -30,6 +30,11 @@ $ qlot exec lake server
 ```
 $ ros install clack  # for 'clackup' command
 
+# set tokens into env
+$ export GITHUB_TOKEN=xxxxxxx
+$ export SLACK_TOKEN=yyyyyyy
+$ export SLACK_CHANNEL=channel
+
 # TCP localhost
 $ APP_ENV=production qlot exec clackup app.lisp --server woo --debug nil --address 127.0.0.1 --port 8080 --worker-num 4
 # UNIX domain socket
