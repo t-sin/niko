@@ -14,6 +14,11 @@
   (mapcar (lambda (s) (subseq s 1))
           (ppcre:all-matches-as-strings "@[^ ]+" text)))
 
+(defun to-slack-user-id (github-usernames)
+  (let ((users (mito:select-dao 'niko/models/users:users
+                 (sxql:where (:in :github-name github-usernames)))))
+    (mapcar #'niko/models/users:users-slack-id
+            users)))
 
 (defun handle-issues (env)
   (format t "check if assined~%~s~%" env)
@@ -32,18 +37,17 @@
 (defun handle-issue-comment (env)
   (let* ((payload (parse (cdr (assoc "payload" env :test #'string=))))
          (issue (getf payload :|issue|))
-         (comment (getf payload :|comment|)))
-;;    (format t "~S~%" payload)
-    (let* ((owner (getf (getf issue :|user|) :|login|))
-           (mentioned (remove-duplicates (append (list owner)
-                                                 (all-mentions-from (getf comment :|body|)))
-                                         :test #'string=)))
-           (format t "~s~%" (api/user-ids mentioned))
-      (api/post-message (api/channel-id "XXXX")
-                        (format nil "Commented on the issue `~a`~%~a"
+         (comment (getf payload :|comment|))
+         (mentioned (remove-duplicates (all-mentions-from (getf comment :|body|))
+                                       :test #'string=))
+         (mentioned-slack-ids (to-slack-user-id mentioned)))
+    (when mentioned-slack-ids
+      (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
+                        (format nil "are mentioned on the issue `~a`~%~a"
                                 (getf issue :|title|)
                                 (getf comment :|html_url|))
-                        mentioned))))
+                        mentioned-slack-ids))
+    "handled issue-comment"))
 
 (defun webhook (env)
   (let ((event-type (gethash "x-github-event"
