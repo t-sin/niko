@@ -23,5 +23,4 @@
  (when (config :error-log)
    `(:backtrace :output ,(config :error-log)))
  :session
- :csrf
  *app*)
