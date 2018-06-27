@@ -1,6 +1,5 @@
 (defpackage #:niko/api/github-webhook
-  (:use #:cl
-        #:string-case)
+  (:use #:cl)
   (:import-from #:niko/lib/slack
                 #:api/channel-id
                 #:api/user-ids
@@ -71,9 +70,8 @@
   (let ((event-type (gethash "x-github-event"
                              (getf (lack.request:request-env utopian:*request*) :headers))))
     (when (stringp event-type)
-      (string-case (event-type)
-        ("ping" "hello GitHub!")
-        ("issues" (handle-issues env))
-        ("pull_request" (handle-pull-request env))
-        ("issue_comment" (handle-issue-comment env))
+      (cond ((string= event-type "ping") "hello GitHub!")
+        ((string= event-type "issues") (handle-issues env))
+        ((string= event-type "pull_request") (handle-pull-request env))
+        ((string= event-type "issue_comment") (handle-issue-comment env))
         (t (format t "do nothing anymore~%"))))))
