@@ -31,7 +31,7 @@
          (mentioned-slack-ids (to-slack-user-id mentioned)))
     (when mentioned-slack-ids
       (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
-                        (format nil "~%: You are mentioned on the issue `~a`~%~a"
+                        (format nil "~% You are mentioned on the issue `~a`~%~a"
                                 (getf issue :|title|)
                                 (getf issue :|html_url|))
                         mentioned-slack-ids))
@@ -45,7 +45,7 @@
          (mentioned-slack-ids (to-slack-user-id mentioned)))
     (when mentioned-slack-ids
       (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
-                        (format nil "~%: You are mentioned on the PR `~a`~%~a"
+                        (format nil "~% You are mentioned on the PR `~a`~%~a"
                                 (getf pr :|title|)
                                 (getf pr :|html_url|))
                         mentioned-slack-ids))
@@ -60,7 +60,7 @@
          (mentioned-slack-ids (to-slack-user-id mentioned)))
     (when mentioned-slack-ids
       (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
-                        (format nil "~%: You are mentioned on the issue comment `~a`~%~a"
+                        (format nil "~% You are mentioned on the issue comment `~a`~%~a"
                                 (getf issue :|title|)
                                 (getf comment :|html_url|))
                         mentioned-slack-ids))
