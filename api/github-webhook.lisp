@@ -51,6 +51,37 @@
                         mentioned-slack-ids))
   "handled pull-request"))
 
+(defun handle-pull-request-review (env)
+  (let ((payload (parse (cdr (assoc "payload" env :test #'string=)))))
+    (when (string= (getf payload :|action|) "submitted")
+      (let* ((pr (getf payload :|pull_request|))
+             (mentioned (remove-duplicates (all-mentions-from (getf payload :|body|))
+                                           :test #'string=))
+             (mentioned-slack-ids (to-slack-user-id mentioned)))
+        (when mentioned-slack-ids
+          (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
+                            (format nil "~% You are mentioned on the PR REVIEW`~a`~%~a"
+                                    (getf pr :|title|)
+                                    (getf payload :|html_url|))
+                            mentioned-slack-ids))
+        "handled pull-request review"))))
+
+(defun handle-pull-request-review-comment (env)
+  (let ((payload (parse (cdr (assoc "payload" env :test #'string=)))))
+    (when (string= (getf payload :|action|) "created")
+      (let* ((pr (getf payload :|pull_request|))
+             (comment (getf payload :|comment|))
+             (mentioned (remove-duplicates (all-mentions-from (getf comment :|body|))
+                                           :test #'string=))
+             (mentioned-slack-ids (to-slack-user-id mentioned)))
+        (when mentioned-slack-ids
+          (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
+                            (format nil "~% You are mentioned on the RP review comment `~a`~%~a"
+                                    (getf pr :|title|)
+                                    (getf comment :|html|))
+                            mentioned-slack-ids))
+        "handled pull-request review comment"))))
+
 (defun handle-issue-comment (env)
   (let* ((payload (parse (cdr (assoc "payload" env :test #'string=))))
          (issue (getf payload :|issue|))
@@ -69,9 +100,12 @@
 (defun webhook (env)
   (let ((event-type (gethash "x-github-event"
                              (getf (lack.request:request-env utopian:*request*) :headers))))
+    (format t "event-type: ~a~%" event-type)
     (when (stringp event-type)
       (cond ((string= event-type "ping") "hello GitHub!")
         ((string= event-type "issues") (handle-issues env))
         ((string= event-type "pull_request") (handle-pull-request env))
+        ((string= event-type "pull_request_review") (handle-pull-request-review env))
+        ((string= event-type "pull_request_review_comment") (handle-pull-request-review-comment env))
         ((string= event-type "issue_comment") (handle-issue-comment env))
         (t (format t "do nothing anymore~%"))))))
