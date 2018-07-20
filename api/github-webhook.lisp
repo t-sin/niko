@@ -65,16 +65,21 @@
 (defun handle-pull-request (env)
   (let* ((payload (parse (cdr (assoc "payload" env :test #'string=))))
          (pr (getf payload :|pull_request|))
+         (assignee (getf payload :|assignee|))
          (mentioned (remove-duplicates (all-mentions-from (getf pr :|body|))
                                        :test #'string=))
          (mentioned-slack-ids (to-slack-user-id mentioned)))
-    (when mentioned-slack-ids
-      (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
-                        (format nil "~% You are mentioned on the PR `~a`~%~a"
-                                (getf pr :|title|)
-                                (getf pr :|html_url|))
-                        mentioned-slack-ids))
-  "handled pull-request"))
+    (if assignee
+        (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
+                          (generate-message "assigned" "Pull-Request"
+                                            (getf pr :|title|) (getf pr :|html_url|) (getf pr :|body|))
+                          (to-slack-user-id (list (getf assignee :|login|))))
+        (when mentioned-slack-ids
+          (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
+                            (generate-message "commented" "Pull-Request"
+                                              (getf pr :|title|) (getf pr :|html_url|) (getf pr :|body|))
+                            mentioned-slack-ids)))
+    "handled pull-request"))
 
 (defun handle-pull-request-review (env)
   (let ((payload (parse (cdr (assoc "payload" env :test #'string=)))))
