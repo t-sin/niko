@@ -56,3 +56,7 @@ $ APP_ENV=production qlot exec clackup app.lisp --server woo --debug nil --liste
 
 * [Utopian](https://github.com/fukamachi/utopian): Web application framework
 * [Mito](https://github.com/fukamachi/mito): An ORM library
+
+## License
+
+This software is licensed under the Lisp Lesser GNU General Public License (LLGPL).
