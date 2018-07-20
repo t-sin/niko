@@ -1,0 +1,44 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  color: #280250;
+  font-family: 'Lato', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+#main h1 {
+  max-width: none;
+  margin: 0;
+  margin-bottom: 30px;
+  padding: 25px 15px;
+  background-color: #360d6b;
+  color: #fff;
+  font-size: 45px;
+  font-weight: 700;
+}
+
+#main h1:before {
+  content: "💡";
+}
+
+#main > * {
+  margin-left: 15px;
+  max-width: 600px;
+}
+
+#main blockquote {
+  padding: 10px;
+  border-left: solid 5px #ddd;
+  color: #777;
+}
+
+#main a:visited {
+  color: #7b23fd;
+}
+
+#main a:hover {
+  text-decoration: none;
+  color: #9263d8;
+}
