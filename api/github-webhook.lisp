@@ -33,7 +33,7 @@
          (mentioned (remove-duplicates (all-mentions-from (getf issue :|body|))
                                        :test #'string=))
          (mentioned-slack-ids (to-slack-user-id mentioned)))
-    (if assignee
+    (if (and (string= (getf payload :|action|) "assigned") assignee)
         (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
                           (generate-message "assigned" "issue" (getf issue :|title|)
                                             (getf issue :|html_url|)
@@ -69,7 +69,7 @@
          (mentioned (remove-duplicates (all-mentions-from (getf pr :|body|))
                                        :test #'string=))
          (mentioned-slack-ids (to-slack-user-id mentioned)))
-    (if assignee
+    (if (and (string= (getf payload :|action|) "assigned") assignee)
         (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
                           (generate-message "assigned" "Pull-Request"
                                             (getf pr :|title|) (getf pr :|html_url|) (getf pr :|body|))
