@@ -90,9 +90,8 @@
              (mentioned-slack-ids (to-slack-user-id mentioned)))
         (when mentioned-slack-ids
           (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
-                            (format nil "~% You are mentioned on the PR REVIEW`~a`~%~a"
-                                    (getf pr :|title|)
-                                    (getf payload :|html_url|))
+                            (generate-message "mentioned" "PR Review"
+                                              (getf pr :|title|) (getf payload :|html_url|) "")
                             mentioned-slack-ids))
         "handled pull-request review"))))
 
@@ -106,9 +105,8 @@
              (mentioned-slack-ids (to-slack-user-id mentioned)))
         (when mentioned-slack-ids
           (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
-                            (format nil "~% You are mentioned on the RP review comment `~a`~%~a"
-                                    (getf pr :|title|)
-                                    (getf comment :|html|))
+                            (generate-message "mentioned" "PR Review"
+                                              (getf pr :|title|) (getf comment :|html|) "")
                             mentioned-slack-ids))
         "handled pull-request review comment"))))
 
