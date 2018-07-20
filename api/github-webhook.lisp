@@ -22,20 +22,45 @@
     (mapcar #'users-slack-id
             users)))
 
+(defun generate-message (verb type title url body)
+  (format nil "~% You are ~a on the ~a `~a`~%~a~%~{~^> ~a~}"
+          verb type title url (split-sequence:split-sequence #\newline body)))
+
 (defun handle-issues (env)
-  (format t "check if assined~%~s~%" env)
   (let* ((payload (parse (cdr (assoc "payload" env :test #'string=))))
          (issue (getf payload :|issue|))
+         (assignee (getf payload :|assignee|))
          (mentioned (remove-duplicates (all-mentions-from (getf issue :|body|))
+                                       :test #'string=))
+         (mentioned-slack-ids (to-slack-user-id mentioned)))
+    (if assignee
+        (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
+                          (generate-message "assigned" "issue" (getf issue :|title|)
+                                            (getf issue :|html_url|)
+                                            (getf issue :|body|))
+                          (to-slack-user-id (list (getf assignee :|login|))))
+        (when mentioned-slack-ids
+          (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
+                            (generate-message "commented" "issue" (getf issue :|title|)
+                                              (getf issue :|html_url|)
+                                              (getf issue :|body|))
+                            mentioned-slack-ids)))
+    "handled issue"))
+
+(defun handle-issue-comment (env)
+  (let* ((payload (parse (cdr (assoc "payload" env :test #'string=))))
+         (issue (getf payload :|issue|))
+         (comment (getf payload :|comment|))
+         (mentioned (remove-duplicates (all-mentions-from (getf comment :|body|))
                                        :test #'string=))
          (mentioned-slack-ids (to-slack-user-id mentioned)))
     (when mentioned-slack-ids
       (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
-                        (format nil "~% You are mentioned on the issue `~a`~%~a"
-                                (getf issue :|title|)
-                                (getf issue :|html_url|))
+                        (generate-message "commented" "issue comment" (getf issue :|title|)
+                                          (getf comment :|html_url|)
+                                          (getf comment :|body|))
                         mentioned-slack-ids))
-    "handled issue"))
+    "handled issue-comment"))
 
 (defun handle-pull-request (env)
   (let* ((payload (parse (cdr (assoc "payload" env :test #'string=))))
@@ -81,21 +106,6 @@
                                     (getf comment :|html|))
                             mentioned-slack-ids))
         "handled pull-request review comment"))))
-
-(defun handle-issue-comment (env)
-  (let* ((payload (parse (cdr (assoc "payload" env :test #'string=))))
-         (issue (getf payload :|issue|))
-         (comment (getf payload :|comment|))
-         (mentioned (remove-duplicates (all-mentions-from (getf comment :|body|))
-                                       :test #'string=))
-         (mentioned-slack-ids (to-slack-user-id mentioned)))
-    (when mentioned-slack-ids
-      (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
-                        (format nil "~% You are mentioned on the issue comment `~a`~%~a"
-                                (getf issue :|title|)
-                                (getf comment :|html_url|))
-                        mentioned-slack-ids))
-    "handled issue-comment"))
 
 (defun webhook (env)
   (let ((event-type (gethash "x-github-event"
