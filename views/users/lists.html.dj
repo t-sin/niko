@@ -3,7 +3,7 @@
 {% block content %}
 <div id="main">
 
-  <h1>GitHub-Slack user correspondence</h1>
+  <h1>GitHub-Slack user map</h1>
 
   <table>
     <tr>

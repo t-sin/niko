@@ -3,7 +3,7 @@
 {% block content %}
 <div id="main">
 
-  <h1>Adding GitHub-Slack user correspondence</h1>
+  <h1>Add user map</h1>
 
   <form action="" method="post">
     <div>
