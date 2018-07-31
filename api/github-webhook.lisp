@@ -34,11 +34,13 @@
                                        :test #'string=))
          (mentioned-slack-ids (to-slack-user-id mentioned)))
     (if (and (string= (getf payload :|action|) "assigned") assignee)
-        (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
-                          (generate-message "assigned" "issue" (getf issue :|title|)
-                                            (getf issue :|html_url|)
-                                            (getf issue :|body|))
-                          (to-slack-user-id (list (getf assignee :|login|))))
+        (let ((assignee (to-slack-user-id (list (getf assignee :|login|)))))
+          (when assignee
+            (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
+                              (generate-message "assigned" "issue" (getf issue :|title|)
+                                                (getf issue :|html_url|)
+                                                (getf issue :|body|))
+                              assignee)))
         (when mentioned-slack-ids
           (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
                             (generate-message "commented" "issue" (getf issue :|title|)
@@ -70,10 +72,12 @@
                                        :test #'string=))
          (mentioned-slack-ids (to-slack-user-id mentioned)))
     (if (and (string= (getf payload :|action|) "assigned") assignee)
-        (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
-                          (generate-message "assigned" "Pull-Request"
-                                            (getf pr :|title|) (getf pr :|html_url|) (getf pr :|body|))
-                          (to-slack-user-id (list (getf assignee :|login|))))
+        (let ((assignee (to-slack-user-id (list (getf assignee :|login|)))))
+          (when assignee
+            (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
+                              (generate-message "assigned" "Pull-Request"
+                                                (getf pr :|title|) (getf pr :|html_url|) (getf pr :|body|))
+                              assignee)))
         (when mentioned-slack-ids
           (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
                             (generate-message "commented" "Pull-Request"
