@@ -89,22 +89,26 @@
     "handled pull-request"))
 
 (defun handle-pull-request-review (env)
-  (let ((payload (parse (cdr (assoc "payload" env :test #'string=)))))
-    (when (string= (getf payload :|action|) "submitted")
+  (let* ((payload (parse (cdr (assoc "payload" env :test #'string=))))
+         (action (getf payload :|action|))
+         (review (getf payload :|review|)))
+    (when (string= action "submitted")
       (let* ((pr (getf payload :|pull_request|))
-             (mentioned (remove-duplicates (all-mentions-from (getf payload :|body|))
+             (mentioned (remove-duplicates (all-mentions-from (getf review :|body|))
                                            :test #'string=))
              (mentioned-slack-ids (to-slack-user-id mentioned)))
         (when mentioned-slack-ids
           (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
                             (generate-message "mentioned" "PR Review"
-                                              (getf pr :|title|) (getf payload :|html_url|) "")
+                                              (getf pr :|title|) (getf review :|html_url|) (getf review :|body|))
                             mentioned-slack-ids))
         "handled pull-request review"))))
 
 (defun handle-pull-request-review-comment (env)
-  (let ((payload (parse (cdr (assoc "payload" env :test #'string=)))))
-    (when (string= (getf payload :|action|) "created")
+  (let* ((payload (parse (cdr (assoc "payload" env :test #'string=))))
+         (action (getf payload :|action|)))
+    (print payload)
+    (when (string= action "created")
       (let* ((pr (getf payload :|pull_request|))
              (comment (getf payload :|comment|))
              (mentioned (remove-duplicates (all-mentions-from (getf comment :|body|))
@@ -112,8 +116,8 @@
              (mentioned-slack-ids (to-slack-user-id mentioned)))
         (when mentioned-slack-ids
           (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
-                            (generate-message "mentioned" "PR Review"
-                                              (getf pr :|title|) (getf comment :|html|) "")
+                            (generate-message "mentioned" "PR Review comment"
+                                              (getf pr :|title|) (getf comment :|html_url|) (getf comment :|body|))
                             mentioned-slack-ids))
         "handled pull-request review comment"))))
 
