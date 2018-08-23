@@ -28,12 +28,13 @@
 
 (defun handle-issues (env)
   (let* ((payload (parse (cdr (assoc "payload" env :test #'string=))))
+         (action (getf payload :|action|))
          (issue (getf payload :|issue|))
          (assignee (getf payload :|assignee|))
          (mentioned (remove-duplicates (all-mentions-from (getf issue :|body|))
                                        :test #'string=))
          (mentioned-slack-ids (to-slack-user-id mentioned)))
-    (if (and (string= (getf payload :|action|) "assigned") assignee)
+    (if (and (string= action "assigned") assignee)
         (let ((assignee (to-slack-user-id (list (getf assignee :|login|)))))
           (when assignee
             (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
@@ -41,7 +42,7 @@
                                                 (getf issue :|html_url|)
                                                 (getf issue :|body|))
                               assignee)))
-        (when mentioned-slack-ids
+        (when (and (string= action "opened") mentioned-slack-ids)
           (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
                             (generate-message "commented" "issue" (getf issue :|title|)
                                               (getf issue :|html_url|)
@@ -51,12 +52,13 @@
 
 (defun handle-issue-comment (env)
   (let* ((payload (parse (cdr (assoc "payload" env :test #'string=))))
+         (action (getf payload :|action|))
          (issue (getf payload :|issue|))
          (comment (getf payload :|comment|))
          (mentioned (remove-duplicates (all-mentions-from (getf comment :|body|))
                                        :test #'string=))
          (mentioned-slack-ids (to-slack-user-id mentioned)))
-    (when mentioned-slack-ids
+    (when (and (string= action "created") mentioned-slack-ids)
       (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
                         (generate-message "commented" "issue comment" (getf issue :|title|)
                                           (getf comment :|html_url|)
@@ -66,19 +68,20 @@
 
 (defun handle-pull-request (env)
   (let* ((payload (parse (cdr (assoc "payload" env :test #'string=))))
+         (action (getf payload :|action|))
          (pr (getf payload :|pull_request|))
          (assignee (getf payload :|assignee|))
          (mentioned (remove-duplicates (all-mentions-from (getf pr :|body|))
                                        :test #'string=))
          (mentioned-slack-ids (to-slack-user-id mentioned)))
-    (if (and (string= (getf payload :|action|) "assigned") assignee)
+    (if (and (string= action "assigned") assignee)
         (let ((assignee (to-slack-user-id (list (getf assignee :|login|)))))
           (when assignee
             (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
                               (generate-message "assigned" "Pull-Request"
                                                 (getf pr :|title|) (getf pr :|html_url|) (getf pr :|body|))
                               assignee)))
-        (when mentioned-slack-ids
+        (when (and (string= action "opened") mentioned-slack-ids)
           (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
                             (generate-message "commented" "Pull-Request"
                                               (getf pr :|title|) (getf pr :|html_url|) (getf pr :|body|))
