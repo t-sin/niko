@@ -24,7 +24,8 @@
 
 (defun generate-message (verb type title url body)
   (format nil "~% You are ~a on the ~a `~a`~%~a~%~{~^> ~a~}"
-          verb type title url (split-sequence:split-sequence #\newline (subseq body 0 300))))
+          verb type title url
+          (split-sequence:split-sequence #\newline (if (> (length body) 300) (subseq body 0 300) body))))
 
 (defun handle-issues (env)
   (let* ((payload (parse (cdr (assoc "payload" env :test #'string=))))
