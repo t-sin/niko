@@ -75,18 +75,26 @@
          (mentioned (remove-duplicates (all-mentions-from (getf pr :|body|))
                                        :test #'string=))
          (mentioned-slack-ids (to-slack-user-id mentioned)))
-    (if (and (string= action "assigned") assignee)
-        (let ((assignee (to-slack-user-id (list (getf assignee :|login|)))))
-          (when assignee
-            (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
-                              (generate-message "assigned" "Pull-Request"
-                                                (getf pr :|title|) (getf pr :|html_url|) (getf pr :|body|))
-                              assignee)))
-        (when (and (string= action "opened") mentioned-slack-ids)
-          (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
-                            (generate-message "commented" "Pull-Request"
-                                              (getf pr :|title|) (getf pr :|html_url|) (getf pr :|body|))
-                            mentioned-slack-ids)))
+    (cond ((and (string= action "assigned") assignee)
+           (let ((assignee (to-slack-user-id (list (getf assignee :|login|)))))
+             (when assignee
+               (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
+                                 (generate-message "assigned" "Pull-Request"
+                                                   (getf pr :|title|) (getf pr :|html_url|) (getf pr :|body|))
+                                 assignee))))
+          ((and (string= action "review_requested") (getf pr :|requested_reviewers|))
+           (let ((reviewers (to-slack-user-id (mapcar (lambda (rev) (getf rev :|login|))
+                                                      (getf pr :|requested_reviewers|)))))
+             (print pr)
+               (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
+                                 (generate-message "assigned" "Pull-Request"
+                                                   (getf pr :|title|) (getf pr :|html_url|) (getf pr :|body|))
+                                 reviewers)))
+          ((and (string= action "opened") mentioned-slack-ids)
+           (api/post-message (api/channel-id (uiop:getenv "SLACK_CHANNEL"))
+                             (generate-message "commented" "Pull-Request"
+                                               (getf pr :|title|) (getf pr :|html_url|) (getf pr :|body|))
+                             mentioned-slack-ids)))
     "handled pull-request"))
 
 (defun handle-pull-request-review (env)
