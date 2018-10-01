@@ -1,4 +1,4 @@
-{% extends "layouts/default.html.dj" %}
+{% extends "../layouts/default.html.dj" %}
 {% block title %}niko - users{% endblock %}
 {% block content %}
 <div id="main">
