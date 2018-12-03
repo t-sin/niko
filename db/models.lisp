@@ -1,24 +1,24 @@
-(defpackage #:niko/models/users
+(defpackage #:niko/models
   (:use #:cl
         #:mito)
-  (:export #:users
-           #:users-github-id
-           #:users-github-name
-           #:users-slack-id
-           #:users-slack-name))
-(in-package #:niko/models/users)
+  (:export #:user
+           #:user-github-id
+           #:user-github-name
+           #:user-slack-id
+           #:user-slack-name))
+(in-package #:niko/models)
 
-(defclass users ()
+(defclass user ()
   ((github-id :col-type :string
               :initarg :github-id
-              :accessor users-github-id)
+              :accessor user-github-id)
    (github-name :col-type :string
                 :initarg :github-name
-                :accessor users-github-name)
+                :accessor user-github-name)
    (slack-id :col-type :string
              :initarg :slack-id
-             :accessor users-slack-id)
+             :accessor user-slack-id)
    (slack-name :col-type :string
                :initarg :slack-name
-               :accessor users-slack-name))
+               :accessor user-slack-name))
   (:metaclass dao-table-class))
