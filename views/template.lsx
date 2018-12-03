@@ -1,0 +1,13 @@
+(lambda (&key title)
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>{ title }</title>
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" media="screen" href="/public/style.css" />
+  </head>
+  <body>
+    I'm not a cat!
+  </body>
+</html>)

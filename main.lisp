@@ -2,6 +2,7 @@
   (:use #:cl)
   (:import-from #:niko/app
                 #:*app*)
+  (:import-from #:niko/views/main)
   (:export #:start
            #:stop
            #:create-tables))
