@@ -1,4 +1,4 @@
-# Niko
+# Niko - Not-a-cat Slack bot
 
 > "I'm not a cat!"
 
@@ -12,7 +12,7 @@ Because Niko has a managing console, the mapping between GitHub/Slack users can 
 
 * [Roswell](https://github.com/roswell/roswell)
 * [Qlot](https://github.com/fukamachi/qlot)
-* PostgreSQL database called `???`
+* PostgreSQL database called `inventory`
 
 ## Installation
 
