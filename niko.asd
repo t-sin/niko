@@ -4,4 +4,8 @@
   :author "TANAKA Shinichi"
   :license "LLGPL"
   :description "Niko is a Slack bot; Niko tells you are mentioned on GitHub"
-  :depends-on ("niko/main"))
+  :depends-on ("clack"
+               "ningle"
+               "lsx"
+
+               "niko/main"))
