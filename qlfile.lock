@@ -1,0 +1,74 @@
+("quicklisp" .
+ (:class qlot.source.ql:source-ql-all
+  :initargs (:distribution "http://beta.quicklisp.org/dist/quicklisp.txt" :%version :latest)
+  :version "2018-10-18"))
+("local-time" .
+ (:class qlot.source.ql:source-ql
+  :initargs (:project-name "local-time" :distribution "http://beta.quicklisp.org/dist/quicklisp.txt" :%version :latest)
+  :version "ql-2018-10-18"))
+("cl-date-time-parser" .
+ (:class qlot.source.ql:source-ql
+  :initargs (:project-name "cl-date-time-parser" :distribution "http://beta.quicklisp.org/dist/quicklisp.txt" :%version :latest)
+  :version "ql-2018-10-18"))
+("postmodern" .
+ (:class qlot.source.ql:source-ql
+  :initargs (:project-name "postmodern" :distribution "http://beta.quicklisp.org/dist/quicklisp.txt" :%version :latest)
+  :version "ql-2018-10-18"))
+("cl-dbi" .
+ (:class qlot.source.git:source-git
+  :initargs (:project-name "cl-dbi" :remote-url "https://github.com/fukamachi/cl-dbi")
+  :version "git-35b9d6867e16161543dfe3bb65dc430f878621ea"
+  :remote-url "https://github.com/fukamachi/cl-dbi"
+  :ref "35b9d6867e16161543dfe3bb65dc430f878621ea"))
+("sxql" .
+ (:class qlot.source.git:source-git
+  :initargs (:project-name "sxql" :remote-url "https://github.com/fukamachi/sxql")
+  :version "git-8ad56b3c997538434d400d13ae1999696a296b1c"
+  :remote-url "https://github.com/fukamachi/sxql"
+  :ref "8ad56b3c997538434d400d13ae1999696a296b1c"))
+("mito" .
+ (:class qlot.source.git:source-git
+  :initargs (:project-name "mito" :remote-url "https://github.com/fukamachi/mito")
+  :version "git-1adfc5590deb9d241443f63dfa5270fd937c503a"
+  :remote-url "https://github.com/fukamachi/mito"
+  :ref "1adfc5590deb9d241443f63dfa5270fd937c503a"))
+("trivial-mimes" .
+ (:class qlot.source.ql:source-ql
+  :initargs (:project-name "trivial-mimes" :distribution "http://beta.quicklisp.org/dist/quicklisp.txt" :%version :latest)
+  :version "ql-2018-10-18"))
+("woo" .
+ (:class qlot.source.git:source-git
+  :initargs (:project-name "woo" :remote-url "https://github.com/fukamachi/woo")
+  :version "git-648f1cbdaff0ff8b47b7c6c936349ccb8bf40fac"
+  :remote-url "https://github.com/fukamachi/woo"
+  :ref "648f1cbdaff0ff8b47b7c6c936349ccb8bf40fac"))
+("clack" .
+ (:class qlot.source.git:source-git
+  :initargs (:project-name "clack" :remote-url "https://github.com/fukamachi/clack")
+  :version "git-e3e032843bb1220ab96263c411aa7f2feb4746e0"
+  :remote-url "https://github.com/fukamachi/clack"
+  :ref "e3e032843bb1220ab96263c411aa7f2feb4746e0"))
+("ningle" .
+ (:class qlot.source.git:source-git
+  :initargs (:project-name "ningle" :remote-url "https://github.com/fukamachi/ningle")
+  :version "git-50bd4f09b5a03a7249bd4d78265d6451563b25ad"
+  :remote-url "https://github.com/fukamachi/ningle"
+  :ref "50bd4f09b5a03a7249bd4d78265d6451563b25ad"))
+("lsx" .
+ (:class qlot.source.git:source-git
+  :initargs (:project-name "lsx" :remote-url "https://github.com/fukamachi/lsx")
+  :version "git-c66bcabd17e238c0d32c284610e987de994ee58f"
+  :remote-url "https://github.com/fukamachi/lsx"
+  :ref "c66bcabd17e238c0d32c284610e987de994ee58f"))
+("dexador" .
+ (:class qlot.source.git:source-git
+  :initargs (:project-name "dexador" :remote-url "https://github.com/fukamachi/dexador")
+  :version "git-aad23891ef6ef87f28d9e1ac3021783605d69d3f"
+  :remote-url "https://github.com/fukamachi/dexador"
+  :ref "aad23891ef6ef87f28d9e1ac3021783605d69d3f"))
+("jonathan" .
+ (:class qlot.source.git:source-git
+  :initargs (:project-name "jonathan" :remote-url "https://github.com/Rudolph-Miller/jonathan")
+  :version "git-1f448b4f7ac8265e56e1c02b32ce383e65316300"
+  :remote-url "https://github.com/Rudolph-Miller/jonathan"
+  :ref "1f448b4f7ac8265e56e1c02b32ce383e65316300"))
