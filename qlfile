@@ -1,10 +1,13 @@
 ql local-time :latest
 ql cl-date-time-parser :latest
 
+ql cl-postgres :latest
 git cl-dbi https://github.com/fukamachi/cl-dbi
 git sxql https://github.com/fukamachi/sxql
 git mito https://github.com/fukamachi/mito
 
+git woo https://github.com/fukamachi/woo
+git clack https://github.com/fukamachi/clack
 git ningle https://github.com/fukamachi/nignle
 git lsx https://github.com/fukamachi/lsx
 
