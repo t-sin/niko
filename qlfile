@@ -1,11 +1,12 @@
 ql local-time :latest
 ql cl-date-time-parser :latest
 
-git ningle https://github.com/fukamachi/nignle
-
 git cl-dbi https://github.com/fukamachi/cl-dbi
 git sxql https://github.com/fukamachi/sxql
 git mito https://github.com/fukamachi/mito
+
+git ningle https://github.com/fukamachi/nignle
+git zenekindarl https://github.com/KeenS/zenekindarl
 
 git dexador https://github.com/fukamachi/dexador
 git jonathan https://github.com/Rudolph-Miller/jonathan
