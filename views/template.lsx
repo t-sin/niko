@@ -1,4 +1,4 @@
-(lambda (&key title)
+(lambda (&key title body)
 <!DOCTYPE html>
 <html>
   <head>
@@ -8,6 +8,6 @@
     <link rel="stylesheet" type="text/css" media="screen" href="/public/style.css" />
   </head>
   <body>
-    I'm not a cat!
+    {(lsx:render-object body nil)}
   </body>
 </html>)

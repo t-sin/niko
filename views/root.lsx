@@ -1,8 +1,6 @@
-{% extends "layouts/default.html.dj" %}
-{% block title %}Niko admin{% endblock %}
-{% block content %}
+(lambda (&key)
 <div id="main">
-  <h1>Niko admin</h1>
+  <h1>Niko - Not-a-cat Slack bot</h1>
 
   <blockquote>
     "I'm not a cat!"
@@ -23,7 +21,7 @@
     <li><a href="/users/lists">Lists users</a></li>
   </ul>
 
-  <hr>
+  <hr />
 
   <section>
     <p>
@@ -37,5 +35,4 @@
       Feel free to contribute to <em>Niko</em>!
     </p>
   </section>
-</div>
-{% endblock %}
+</div>)
