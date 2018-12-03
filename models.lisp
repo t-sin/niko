@@ -1,12 +1,24 @@
-#.`(uiop:define-package #:niko/models
-     (:use #:cl)
-     (:use-reexport
-      ,@(labels ((directory-models (dir)
-                   (append
-                    (uiop:directory-files dir "*.lisp")
-                    (mapcan #'directory-models (uiop:subdirectories dir)))))
-          (mapcar (lambda (file)
-                    (second
-                     (asdf/package-inferred-system::file-defpackage-form file)))
-                  (directory-models (asdf:system-relative-pathname '#:niko #P"models/"))))))
-(in-package #:niko/models)
+(defpackage #:niko/models/users
+  (:use #:cl
+        #:mito)
+  (:export #:users
+           #:users-github-id
+           #:users-github-name
+           #:users-slack-id
+           #:users-slack-name))
+(in-package #:niko/models/users)
+
+(defclass users ()
+  ((github-id :col-type :string
+              :initarg :github-id
+              :accessor users-github-id)
+   (github-name :col-type :string
+                :initarg :github-name
+                :accessor users-github-name)
+   (slack-id :col-type :string
+             :initarg :slack-id
+             :accessor users-slack-id)
+   (slack-name :col-type :string
+               :initarg :slack-name
+               :accessor users-slack-name))
+  (:metaclass dao-table-class))

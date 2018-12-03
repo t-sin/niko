@@ -1,12 +1,11 @@
-git utopian https://github.com/fukamachi/utopian
-git dissect https://github.com/Shinmera/dissect
-git mito https://github.com/fukamachi/mito
-ql lake :latest
-git rove https://github.com/fukamachi/rove
-git cl-dbi https://github.com/fukamachi/cl-dbi
-
-ql dexador :latest
-ql jonathan :latest
 ql local-time :latest
 ql cl-date-time-parser :latest
-ql string-case :latest
+
+git ningle https://github.com/fukamachi/nignle
+
+git cl-dbi https://github.com/fukamachi/cl-dbi
+git sxql https://github.com/fukamachi/sxql
+git mito https://github.com/fukamachi/mito
+
+git dexador https://github.com/fukamachi/dexador
+git jonathan https://github.com/Rudolph-Miller/jonathan
