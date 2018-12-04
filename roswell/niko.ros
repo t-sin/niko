@@ -41,7 +41,7 @@ COMMAND:
                 (parse-integer (string (third argv))))))
     (values addr port)))
 
-(defmacro with-db-error (&body body)
+(defmacro with-error (&body body)
   `(handler-bind
        ((condition
           (lambda (c)
@@ -55,10 +55,14 @@ COMMAND:
       (case (intern (string-upcase (string (first argv))) :keyword)
         (:help (format *error-output* +usage+))
         (:version (format *error-output* "~a~%" (niko/util:version)))
-        ;; (:add-user (survey-program:add-user (second argv) (third argv)))
-        (:generate-migrations (with-db-error (niko:generate-migrations)))
-        (:migrate (with-db-error (niko:migrate)))
-        (:migration-status (with-db-error (niko:migration-status)))
+        (:add-user (let ((github-name (second argv))
+                         (slack-name (third argv)))
+                     (if (or (null github-name) (null slack-name))
+                         (format *error-output* "Specify github-name and slack-name.~%")
+                         (with-error (niko/db/models:add-user github-name slack-name)))))
+        (:generate-migrations (with-error (niko:generate-migrations)))
+        (:migrate (with-error (niko:migrate)))
+        (:migration-status (with-error (niko:migration-status)))
         (:start (multiple-value-bind (addr port)
                     (parse-args-for-start argv)
                   (handler-bind
