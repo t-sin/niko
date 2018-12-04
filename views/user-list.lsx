@@ -23,6 +23,10 @@
 
   <h1>Users in Niko's inventory</h1>
 
+  <blockquote>
+    <quote>lightbulb</quote>: A large lightbulb. It's the sun.
+  </blockquote>
+
   <table>
     <tr>
       <th>id</th>
