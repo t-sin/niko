@@ -2,6 +2,7 @@
   (:use #:cl #:lsx)
   (:import-from #:niko/app
                 #:defroute
+                #:append-header
                 #:params
                 #:status-code)
   (:import-from #:niko/db/models
@@ -41,8 +42,11 @@
         (progn
           (setq status-code 400)
           result)
-        (to-plist (add-user (assoc* "github-username" params)
-                            (assoc* "slack-username" params))))))
+        (progn
+          (add-user (assoc* "github-username" params)
+                    (assoc* "slack-username" params))
+          (append-header :location "/user/list")
+          (setq status-code 303)))))
 
 (defroute ("/user/list" :GET)
   (let* ((lsx:*auto-escape* nil)

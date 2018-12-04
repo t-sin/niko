@@ -9,6 +9,7 @@
   (:export #:*napp*
            #:*app*
            #:assoc*
+           #:append-header
            #:defroute
            #:defapi
            #:status-code
