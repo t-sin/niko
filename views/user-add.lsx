@@ -1,7 +1,7 @@
 (lambda ()
 <div id="main">
 
-  <h1>Add user map</h1>
+  <h1>Register new user</h1>
 
   <form action="" method="post">
     <div>

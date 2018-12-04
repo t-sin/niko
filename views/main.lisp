@@ -65,4 +65,4 @@
          (user-list (get-view :user-list))
          (rendered-body (render-object (funcall user-list :users (all-users)) nil)))
     (render-object (funcall *page-template*
-                            :title "Niko - Register an user" :body rendered-body) nil)))
+                            :title "Niko - User List" :body rendered-body) nil)))
