@@ -1,0 +1,13 @@
+(lambda (&key path)
+<div id="main">
+  <h1><quote>{ path }</quote> Not Found</h1>
+
+  <blockquote>
+    *Confused cat noises*
+  </blockquote>
+
+  <hr />
+
+  <a href="/">index</a>
+
+</div>)

@@ -1,6 +1,9 @@
 (defpackage #:niko/views/main
   (:use #:cl #:lsx)
+  (:import-from #:ningle
+                #:not-found)
   (:import-from #:niko/app
+                #:*napp*
                 #:defroute
                 #:append-header
                 #:params
@@ -18,6 +21,15 @@
 (defun get-view (name)
   (let ((name (format nil "~a.lsx" (string-downcase (symbol-name name)))))
     (read-lsx-file (merge-pathnames name (project-root #P"views/")))))
+
+(defparameter *page-not-found* (get-view :not-found))
+
+(defmethod not-found ((app (eql *napp*)))
+  (let ((lsx:*auto-escape* nil)
+        (path (lack.request:request-path-info ningle:*request*)))
+    (render-object (funcall *page-template*
+                            :title "Niko - Register an user"
+                            :body (funcall *page-not-found* :path path)) nil)))
 
 (defparameter *page-template* (get-view :template))
 
