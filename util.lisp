@@ -1,8 +1,12 @@
 (defpackage #:niko/util
   (:use #:cl)
-  (:export #:*project-name*
+  (:export #:assoc*
+           #:*project-name*
            #:project-root))
 (in-package #:niko/util)
+
+(defun assoc* (str alist)
+  (cdr (assoc str alist :test #'string=)))
 
 (defparameter *project-name* "niko")
 

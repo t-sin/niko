@@ -10,7 +10,9 @@
            #:*app*
            #:assoc*
            #:defroute
-           #:defapi))
+           #:defapi
+           #:status-code
+           #:params))
 (in-package #:niko/app)
 
 (defparameter *napp* (make-instance '<app>))
@@ -19,9 +21,6 @@
   (lack:builder
    (:static :path "/public/" :root (project-root #P"public/"))
    *napp*))
-
-(defun assoc* (str alist)
-  (cdr (assoc str alist :test #'string=)))
 
 (defun to-json* (obj)
   (let ((jojo:*null-value* :null)
