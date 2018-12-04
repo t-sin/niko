@@ -5,10 +5,19 @@
   (:import-from #:niko/views/main)
   (:export #:start
            #:stop
-           #:create-tables))
+           #:generate-migrations
+           #:migrate
+           #:migration-status))
 (in-package #:niko)
 
 (defparameter *app-handler* nil)
+
+(defun connect-db ()
+  (mito:connect-toplevel :postgres
+                         :database-name "inventory"
+                         :host (uiop:getenv "DB_HOST")
+                         :username (uiop:getenv "DB_USER")
+                         :password (uiop:getenv "DB_PASS")))
 
 (defun start (&optional (address "localhost") (port 5000))
   (format t "Hi, I'm Niko!~%")
@@ -19,11 +28,7 @@
                      (return-from start))))
     ;; now cannot handle other thread's condition
     ;; because of it, some conditions are not handled; e.g. port already used
-    (mito:connect-toplevel :postgres
-                           :database-name "inventory"
-                           :host (uiop:getenv "DB_HOST")
-                           :username (uiop:getenv "DB_USER")
-                           :password (uiop:getenv "DB_PASS"))
+    (connect-db)
     (setf *app-handler*
           (clack:clackup *app*
                          :server :woo
@@ -37,5 +42,19 @@
   (mito:disconnect-toplevel)
   (setf *app-handler* nil))
 
-(defun create-tables ()
-  :or-migration-command)
+(defparameter *migration-pathname* (niko/util:project-root #P"db/migrations"))
+
+(defun generate-migrations ()
+  (connect-db)
+  (mito:generate-migrations *migration-pathname*)
+  (mito:disconnect-toplevel))
+
+(defun migrate ()
+  (connect-db)
+  (mito:migrate *migration-pathname*)
+  (mito:disconnect-toplevel))
+
+(defun migration-status ()
+  (connect-db)
+  (format t "~a~%" (mito:migration-status *migration-pathname*))
+  (mito:disconnect-toplevel))

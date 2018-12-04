@@ -17,8 +17,16 @@ usage: niko COMMAND OPTIONS...
 
 COMMAND:
     start [ADDR] [PORT]       Start Niko with ADDR and PORT.
+
+    generate-migrations       Generate DB migration files. This command needs to run niko
+                              in the repository.
+    migrate                   Migrate. This command needs to run niko in the repository.
+    migration-status          Show migration status. This command needs to run niko in
+                              the repository.
+
     add-user GNAME SNAME      Add user into mapping with GitHub username (GNAME)
                               and Slack username (SNAME).
+
     version                   Show version.
     help                      Show this help message.
 ")
@@ -33,6 +41,14 @@ COMMAND:
                 (parse-integer (string (third argv))))))
     (values addr port)))
 
+(defmacro with-db-error (&body body)
+  `(handler-bind
+       ((condition
+          (lambda (c)
+            (format *error-output* "Error!~%~a~%"c)
+            (return-from main))))
+     (progn ,@body)))
+
 (defun main (&rest argv)
   (if (= (length argv) 0)
       (format *error-output* +usage+)
@@ -40,6 +56,9 @@ COMMAND:
         (:help (format *error-output* +usage+))
         (:version (format *error-output* "~a~%" (niko/util:version)))
         ;; (:add-user (survey-program:add-user (second argv) (third argv)))
+        (:generate-migrations (with-db-error (niko:generate-migrations)))
+        (:migrate (with-db-error (niko:migrate)))
+        (:migration-status (with-db-error (niko:migration-status)))
         (:start (multiple-value-bind (addr port)
                     (parse-args-for-start argv)
                   (handler-bind
