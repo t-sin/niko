@@ -41,8 +41,7 @@
      (append-header :content-type "application/json")
      (append-header :access-control-allow-origin "*")
      (append-header :access-control-allow-headres "Content-type, Authorization")
-     (let ((result (progn ,@body)))
-       (to-json* result))))
+     (to-json* result)))
 
 (defmacro defapi ((path method) &body body)
   `(progn
