@@ -17,8 +17,8 @@
   </section>
 
   <ul>
-    <li><a href="/users/add">Adds user</a></li>
-    <li><a href="/users/lists">Lists users</a></li>
+    <li><a href="/user/add">Adds user</a></li>
+    <li><a href="/user/list">Lists users</a></li>
   </ul>
 
   <hr />

@@ -1,0 +1,41 @@
+(lambda (&key (users nil))
+  (let ((user-row (lambda (&key id github-name github-id slack-name slack-id)
+                    <tr>
+                      <td>{ id }</td>
+                      <td><a href="https://github.com/{ github-name }">{ github-name }</a></td>
+                      <td>{ github-id }</td>
+                      <td>{ slack-name }</td>
+                      <td>{ slack-id }</td>
+                    </tr>)))
+    (flet ((render-row (user)
+             (let ((user-id (getf user :id))
+                   (github-id (getf user :github-id))
+                   (github-name (getf user :github-name))
+                   (slack-id (getf user :slack-id))
+                   (slack-name (getf user :slack-name)))
+               (lsx:render-object (funcall user-row :id user-id
+                                                    :github-id github-id
+                                                    :github-name github-name
+                                                    :slack-id slack-id
+                                                    :slack-name slack-name)
+                                  nil))))
+<div id="main">
+
+  <h1>GitHub-Slack user map</h1>
+
+  <table>
+    <tr>
+      <th>id</th>
+      <th>github-name</th>
+      <th>github-id</th>
+      <th>slack-name</th>
+      <th>slack-id</th>
+    </tr>
+    {(loop :for user :in users :collect (render-row user))}
+  </table>
+
+  <hr />
+
+  <a href="/">index</a>
+
+</div>)))

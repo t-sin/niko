@@ -1,0 +1,22 @@
+(lambda ()
+<div id="main">
+
+  <h1>Add user map</h1>
+
+  <form action="" method="post">
+    <div>
+      <label for="github-username">github username</label>
+      <input name="github-username" />
+    </div>
+    <div>
+      <label for="slack-username">slack username</label>
+      <input name="slack-username" />
+    </div>
+    <button>submit</button>
+  </form>
+
+  <hr />
+
+  <a href="/">index</a>
+
+</div>)
