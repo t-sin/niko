@@ -22,7 +22,7 @@
         (jojo:*false-value* :false)
         (jojo:*empty-array-value* :[])
         (jojo:*empty-object-value* :{}))
-    (to-json obj)))
+    (jojo:to-json obj)))
 
 (defmacro append-header (name value)
   `(setf (lack.response:response-headers ningle:*response*)
