@@ -4,9 +4,9 @@
 
 Niko is a Slack bot; Niko tells you are mentioned on GitHub.
 
-Niko holds the mapping between GitHub users and Slack users. When the GitHub users are mentioned on issues, issue comments or pull requests, then Niko mentiones corresponding Slack users by a post on specified Slack channel.
+Niko stores a mapping between GitHub users and Slack users. When the GitHub users are mentioned on issues, issue comments or pull requests, then Niko mentiones corresponding Slack users by a post on a Slack channel specified by the envorinment variable `SLACK_CHANNEL`.
 
-Because Niko has a managing console, the mapping between GitHub/Slack users can be edit on the browser. Run this app and access like `localhost:5000/`.
+By a managing console on the path `/`, the mapping between GitHub/Slack users can be edit on the browser. Run this app and access like `localhost:5000/`.
 
 ## Requirements
 
