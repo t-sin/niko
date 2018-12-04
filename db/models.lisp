@@ -1,4 +1,4 @@
-(defpackage #:niko/models
+(defpackage #:niko/db/models
   (:use #:cl
         #:sxql
         #:mito)
@@ -6,7 +6,9 @@
                 #:api/user)
   (:import-from #:niko/lib/slack
                 #:api/user-ids)
-  (:export #:user
+  (:export #:to-plist
+
+           #:user
            #:user-github-id
            #:user-github-name
            #:user-slack-id

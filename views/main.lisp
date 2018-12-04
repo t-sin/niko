@@ -1,8 +1,15 @@
 (defpackage #:niko/views/main
   (:use #:cl #:lsx)
   (:import-from #:niko/app
-                #:defroute)
+                #:defroute
+                #:params
+                #:status-code)
+  (:import-from #:niko/db/models
+                #:to-plist
+                #:all-users
+                #:add-user)
   (:import-from #:niko/util
+                #:assoc*
                 #:project-root)
   (:export #:view-template))
 (in-package #:niko/views/main)
@@ -25,12 +32,21 @@
                             :title "Niko - Register an user"
                             :body (get-view :user-add)) nil)))
 
-(defparameter *users*
-  '((:id 1 :github-id 1234 :github-name "t-sin" :slack-id 12 :slack-name "t-sin")
-    (:id 2 :github-id 111 :github-name "test" :slack-id 345 :slack-name "hoge")))
+(defun validate-user-add (params)
+  t)
+
+(defroute ("/user/add" :POST)
+  (let ((result (validate-user-add params)))
+    (if (typep result 'string)
+        (progn
+          (setq status-code 400)
+          result)
+        (to-plist (add-user (assoc* "github-username" params)
+                            (assoc* "slack-username" params))))))
+
 (defroute ("/user/list" :GET)
   (let* ((lsx:*auto-escape* nil)
          (user-list (get-view :user-list))
-         (rendered-body (render-object (funcall user-list :users *users*) nil)))
+         (rendered-body (render-object (funcall user-list :users (all-users)) nil)))
     (render-object (funcall *page-template*
                             :title "Niko - Register an user" :body rendered-body) nil)))
