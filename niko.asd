@@ -10,6 +10,9 @@
                "ningle"
                "lsx"
 
+               "cl-postgres"
+               "cl-dbi"
+               "dbd-postgres"
                "mito"
 
                "niko/main"))

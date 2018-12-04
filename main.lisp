@@ -12,7 +12,7 @@
 
 (defun start (&optional (address "localhost") (port 5000))
   (format t "Hi, I'm Niko!~%")
-  (mito:connect-toplevel :porsgres
+  (mito:connect-toplevel :postgres
                          :database-name "inventory"
                          :host (uiop:getenv "DB_HOST")
                          :username (uiop:getenv "DB_USER")
