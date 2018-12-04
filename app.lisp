@@ -6,8 +6,7 @@
                 #:<app>)
   (:import-from #:niko/util
                 #:project-root)
-  (:export #:*napp*
-           #:*app*
+  (:export #:*app*
            #:assoc*
            #:append-header
            #:defroute
@@ -16,12 +15,7 @@
            #:params))
 (in-package #:niko/app)
 
-(defparameter *napp* (make-instance '<app>))
-
-(defparameter *app*
-  (lack:builder
-   (:static :path "/public/" :root (project-root #P"public/"))
-   *napp*))
+(defparameter *app* (make-instance '<app>))
 
 (defun to-json* (obj)
   (let ((jojo:*null-value* :null)
@@ -36,7 +30,7 @@
                 (list ,name ,value))))
 
 (defmacro defroute ((path method) &body body)
-  `(setf (ningle:route niko/app:*napp* ,path :method ,method)
+  `(setf (ningle:route niko/app:*app* ,path :method ,method)
          (lambda (params)
            (declare (ignorable params))
            (symbol-macrolet ((status-code (lack.response:response-status ningle:*response*)))

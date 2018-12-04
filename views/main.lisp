@@ -3,7 +3,7 @@
   (:import-from #:ningle
                 #:not-found)
   (:import-from #:niko/app
-                #:*napp*
+                #:*app*
                 #:defroute
                 #:append-header
                 #:params
@@ -33,7 +33,7 @@
 
 (defparameter *page-not-found* (get-view :not-found))
 
-(defmethod not-found ((app (eql *napp*)))
+(defmethod not-found ((app (eql *app*)))
   (let ((lsx:*auto-escape* nil)
         (path (lack.request:request-path-info ningle:*request*)))
     (render-object (funcall *page-template*
