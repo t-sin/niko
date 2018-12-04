@@ -18,6 +18,15 @@
   (:export #:view-template))
 (in-package #:niko/views/main)
 
+(defparameter *css* (with-output-to-string (out)
+                        (with-open-file (in (merge-pathnames "style.css" (project-root #P"views/")))
+                          (loop
+                            :for line := (read-line in nil :eof)
+                            :until (eq line :eof)
+                            :do (format out "~a~%" line)))))
+
+(defroute ("/style.css" :GET) *css*)
+
 (defun get-view (name)
   (let ((name (format nil "~a.lsx" (string-downcase (symbol-name name)))))
     (read-lsx-file (merge-pathnames name (project-root #P"views/")))))
