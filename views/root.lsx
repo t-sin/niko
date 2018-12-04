@@ -39,6 +39,6 @@
   </section>
 
   <footer>
-    { (format nil "Version: ~a" version) }
+    <em>Niko ver. { version }</em>
   </footer>
 </div>)
