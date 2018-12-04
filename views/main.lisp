@@ -17,7 +17,8 @@
                 #:webhook)
   (:import-from #:niko/util
                 #:assoc*
-                #:project-root)
+                #:project-root
+                #:version)
   (:export #:view-template))
 (in-package #:niko/views/main)
 
@@ -49,7 +50,7 @@
   (let ((lsx:*auto-escape* nil))
     (render-object (funcall *page-template*
                             :title "Niko - Not-a-cat Slack bot"
-                            :body (get-view :root)) nil)))
+                            :body (funcall (get-view :root) :version (version))) nil)))
 
 (defroute ("/user/add" :GET)
   (let ((lsx:*auto-escape* nil))

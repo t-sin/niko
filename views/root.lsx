@@ -1,10 +1,11 @@
-(lambda (&key)
+(lambda (&key version)
 <div id="main">
   <h1>Niko - Not-a-cat Slack bot</h1>
 
   <blockquote>
     "I'm not a cat!"
   </blockquote>
+
   <section>
     <p>
       Niko is a Slack bot; Niko tells you are mentioned on GitHub.
@@ -36,4 +37,8 @@
       Feel free to contribute to <em>Niko</em>!
     </p>
   </section>
+
+  <footer>
+    { (format nil "Version: ~a" version) }
+  </footer>
 </div>)
