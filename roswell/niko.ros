@@ -48,7 +48,8 @@ COMMAND:
                            (declare (ignore c))
                            (format *error-output* "Keyboard interrupted~%")
                            (return-from main))))
-                    (niko:start (or addr "localhost") (or port 5000)))))
+                    (niko:start (or addr "localhost") (or port 5000))
+                    (loop (sleep 1)))))
         (t (format *error-output* "Unknown command '~a'~%" (first argv))
            (format *error-output* +usage+)))))
 ;;; vim: set ft=lisp lisp:
