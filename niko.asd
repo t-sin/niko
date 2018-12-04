@@ -15,4 +15,6 @@
                "dbd-postgres"
                "mito"
 
+               "dexador"
+
                "niko/main"))
