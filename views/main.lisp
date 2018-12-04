@@ -5,6 +5,7 @@
   (:import-from #:niko/app
                 #:*app*
                 #:defroute
+                #:defapi
                 #:append-header
                 #:params
                 #:status-code)
@@ -12,6 +13,8 @@
                 #:to-plist
                 #:all-users
                 #:add-user)
+  (:import-from #:niko/lib/github-webhook
+                #:webhook)
   (:import-from #:niko/util
                 #:assoc*
                 #:project-root)
@@ -75,3 +78,6 @@
          (rendered-body (render-object (funcall user-list :users (all-users)) nil)))
     (render-object (funcall *page-template*
                             :title "Niko - User List" :body rendered-body) nil)))
+
+(defapi ("/github/webhook" :POST)
+  (webhook params))

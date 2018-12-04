@@ -1,23 +1,23 @@
-(defpackage #:niko/api/github-webhook
+(defpackage #:niko/lib/github-webhook
   (:use #:cl)
   (:import-from #:niko/lib/slack
                 #:api/channel-id
                 #:api/user-ids
                 #:api/post-message)
-  (:import-from #:niko/models/users
-                #:users
-                #:users-slack-id)
+  (:import-from #:niko/db/models
+                #:user
+                #:user-slack-id)
   (:import-from #:jonathan
                 #:parse)
   (:export #:webhook))
-(in-package #:niko/api/github-webhook)
+(in-package #:niko/lib/github-webhook)
 
 (defun all-mentions-from (text)
   (mapcar (lambda (s) (subseq s 1))
           (ppcre:all-matches-as-strings "@[^ ]+" text)))
 
 (defun to-slack-user-id (github-usernames)
-  (let ((users (mito:select-dao 'users
+  (let ((users (mito:select-dao 'user
                  (sxql:where (:in :github-name github-usernames)))))
     (mapcar #'users-slack-id
             users)))
@@ -132,7 +132,7 @@
 
 (defun webhook (env)
   (let ((event-type (gethash "x-github-event"
-                             (getf (lack.request:request-env utopian:*request*) :headers))))
+                             (getf (lack.request:request-env ningle:*request*) :headers))))
     (format t "event-type: ~a~%" event-type)
     (when (stringp event-type)
       (cond ((string= event-type "ping") "hello GitHub!")

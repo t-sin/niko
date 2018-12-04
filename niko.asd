@@ -5,6 +5,7 @@
   :license "LLGPL"
   :description "Niko is a Slack bot; Niko tells you are mentioned on GitHub"
   :depends-on ("uiop"
+               "asdf"
 
                "clack"
                "ningle"
@@ -16,5 +17,6 @@
                "mito"
 
                "dexador"
+               "jonathan"
 
                "niko/main"))
