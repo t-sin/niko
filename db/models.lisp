@@ -14,21 +14,21 @@
 
            #:all-users
            #:add-user))
-(in-package #:niko/models)
+(in-package #:niko/db/models)
 
 (defgeneric to-plist (dao))
 
 (defclass user ()
-  ((github-id :col-type :string
+  ((github-id :col-type (:varchar 256)
               :initarg :github-id
               :accessor user-github-id)
-   (github-name :col-type :string
+   (github-name :col-type (:varchar 256)
                 :initarg :github-name
                 :accessor user-github-name)
-   (slack-id :col-type :string
+   (slack-id :col-type (:varchar 256)
              :initarg :slack-id
              :accessor user-slack-id)
-   (slack-name :col-type :string
+   (slack-name :col-type (:varchar 256)
                :initarg :slack-name
                :accessor user-slack-name))
   (:metaclass dao-table-class))
