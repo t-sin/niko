@@ -19,6 +19,7 @@ COMMAND:
     start [ADDR] [PORT]       Start Niko with ADDR and PORT.
     add-user GNAME SNAME      Add user into mapping with GitHub username (GNAME)
                               and Slack username (SNAME).
+    version                   Show version.
     help                      Show this help message.
 ")
 
@@ -37,6 +38,7 @@ COMMAND:
       (format *error-output* +usage+)
       (case (intern (string-upcase (string (first argv))) :keyword)
         (:help (format *error-output* +usage+))
+        (:version (format *error-output* "~a~%" (niko/util:version)))
         ;; (:add-user (survey-program:add-user (second argv) (third argv)))
         (:start (multiple-value-bind (addr port)
                     (parse-args-for-start argv)
@@ -44,7 +46,7 @@ COMMAND:
                       ((SB-SYS:INTERACTIVE-INTERRUPT
                          (lambda (c)
                            (declare (ignore c))
-                           (format t "Keyboard interrupted~%")
+                           (format *error-output* "Keyboard interrupted~%")
                            (return-from main))))
                     (niko:start (or addr "localhost") (or port 5000)))))
         (t (format *error-output* "Unknown command '~a'~%" (first argv))

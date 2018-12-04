@@ -2,7 +2,8 @@
   (:use #:cl)
   (:export #:assoc*
            #:*project-name*
-           #:project-root))
+           #:project-root
+           #:version))
 (in-package #:niko/util)
 
 (defun assoc* (str alist)
@@ -13,3 +14,6 @@
 (defun project-root (pathname)
   (merge-pathnames pathname
                    (asdf:component-pathname (asdf:find-system *project-name*))))
+
+(defun version ()
+  (asdf:component-version (asdf:find-system *project-name*)))
