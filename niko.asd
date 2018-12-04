@@ -7,6 +7,7 @@
   :depends-on ("uiop"
                "asdf"
 
+               "cffi"
                "woo"
                "clack"
                "ningle"

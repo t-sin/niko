@@ -2,9 +2,29 @@
  (:class qlot.source.ql:source-ql-all
   :initargs (:distribution "http://beta.quicklisp.org/dist/quicklisp.txt" :%version :latest)
   :version "2018-10-18"))
+("uiop" .
+ (:class qlot.source.ql:source-ql
+  :initargs (:project-name "uiop" :distribution "http://beta.quicklisp.org/dist/quicklisp.txt" :%version :latest)
+  :version "ql-2018-10-18"))
+("alexandria" .
+ (:class qlot.source.ql:source-ql
+  :initargs (:project-name "alexandria" :distribution "http://beta.quicklisp.org/dist/quicklisp.txt" :%version :latest)
+  :version "ql-2018-10-18"))
 ("split-sequence" .
  (:class qlot.source.ql:source-ql
   :initargs (:project-name "split-sequence" :distribution "http://beta.quicklisp.org/dist/quicklisp.txt" :%version :latest)
+  :version "ql-2018-10-18"))
+("trivial-features" .
+ (:class qlot.source.ql:source-ql
+  :initargs (:project-name "trivial-features" :distribution "http://beta.quicklisp.org/dist/quicklisp.txt" :%version :latest)
+  :version "ql-2018-10-18"))
+("babel" .
+ (:class qlot.source.ql:source-ql
+  :initargs (:project-name "babel" :distribution "http://beta.quicklisp.org/dist/quicklisp.txt" :%version :latest)
+  :version "ql-2018-10-18"))
+("cffi" .
+ (:class qlot.source.ql:source-ql
+  :initargs (:project-name "cffi" :distribution "http://beta.quicklisp.org/dist/quicklisp.txt" :%version :latest)
   :version "ql-2018-10-18"))
 ("local-time" .
  (:class qlot.source.ql:source-ql

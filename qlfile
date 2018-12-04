@@ -1,4 +1,9 @@
+ql uiop :latest
+ql alexandria :latest
 ql split-sequence :latest
+ql trivial-features :latest
+ql babel :latest
+ql cffi :latest
 
 ql local-time :latest
 ql cl-date-time-parser :latest
