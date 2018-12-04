@@ -10,8 +10,13 @@
 
 (defparameter *app-handler* nil)
 
-(defun start (address port)
+(defun start (&optional (address "localhost") (port 5000))
   (format t "Hi, I'm Niko!~%")
+  (mito:connect-toplevel :porsgres
+                         :database-name "inventory"
+                         :host (uiop:getenv "DB_HOST")
+                         :username (uiop:getenv "DB_USER")
+                         :password (uiop:getenv "DB_PASS"))
   (setf *app-handler*
         (clack:clackup *app*
                        :server :woo
@@ -21,6 +26,7 @@
 (defun stop ()
   (format t "Good night...~%")
   (clack:stop *app-handler*)
+  (mito:disconnect-toplevel)
   (setf *app-handler* nil))
 
 (defun create-tables ()
