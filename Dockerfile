@@ -57,6 +57,6 @@ RUN cd /app && $HOME/.roswell/bin/qlot exec ros build roswell/niko.ros
 # You can use this container to run the program or copy executable file built
 FROM niko-runner
 
-COPY --from=builder /app/roswell/niko /usr/bin/niko
-CMD [ "/usr/bin/niko", "start", "0.0.0.0", "5000" ]
+COPY --from=niko-builder /app/roswell/niko /usr/bin/niko
+CMD [ "/usr/bin/niko", "version" ]
 EXPOSE 5000
