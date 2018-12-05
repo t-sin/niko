@@ -1,4 +1,4 @@
-(lambda (&key title body)
+(lambda (&key title body version)
 <!DOCTYPE html>
 <html>
   <head>
@@ -9,5 +9,11 @@
   </head>
   <body>
     {(lsx:render-object body nil)}
+
+    <footer>
+      <hr />
+      <em>Niko</em> ver. { version },
+      Author: <a title="Author's GitHub account" href="https://github.com/t-sin/">t-sin</a>
+    </footer>
   </body>
 </html>)

@@ -47,19 +47,19 @@
   (let ((lsx:*auto-escape* nil)
         (path (lack.request:request-path-info ningle:*request*)))
     (render-object (funcall (getf *page-map* :template)
-                            :title "Niko - Register an user"
+                            :title "Niko - Register an user" :version (version)
                             :body (funcall (getf *page-map* :not-found) :path path)) nil)))
 
 (defroute ("/" :GET)
   (let ((lsx:*auto-escape* nil))
     (render-object (funcall (getf *page-map* :template)
-                            :title "Niko - Not-a-cat Slack bot"
-                            :body (funcall (getf *page-map* :root) :version (version))) nil)))
+                            :title "Niko - Not-a-cat Slack bot" :version (version)
+                            :body (getf *page-map* :root)) nil)))
 
 (defroute ("/user/add" :GET)
   (let ((lsx:*auto-escape* nil))
     (render-object (funcall (getf *page-map* :template)
-                            :title "Niko - Register an user"
+                            :title "Niko - Register an user" :version (version)
                             :body (getf *page-map* :user-add)) nil)))
 
 (defun validate-user-add (params)
@@ -82,7 +82,9 @@
          (rendered-body (render-object
                          (funcall (getf *page-map* :user-list) :users (all-users)) nil)))
     (render-object (funcall (getf *page-map* :template)
-                            :title "Niko - User List" :body rendered-body) nil)))
+                            :title "Niko - User List"
+                            :body rendered-body
+                            :version (version)) nil)))
 
 (defapi ("/github/webhook" :POST)
   (webhook params))

@@ -1,4 +1,4 @@
-(lambda (&key version)
+(lambda (&key)
 <div id="main">
   <h1>Niko - Not-a-cat Slack bot</h1>
 
@@ -37,8 +37,4 @@
       Feel free to contribute to <em>Niko</em>!
     </p>
   </section>
-
-  <footer>
-    <em>Niko ver. { version }</em>
-  </footer>
 </div>)
