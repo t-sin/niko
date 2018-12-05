@@ -10,15 +10,51 @@ By a managing console, the mapping between GitHub/Slack users can be edit on the
 
 ## Requirements
 
-* [Roswell](https://github.com/roswell/roswell)
-* [Qlot](https://github.com/fukamachi/qlot)
-* PostgreSQL database called `inventory`
+- libev
+- PostgreSQL
+    - database called `inventory`
+- SBCL
 
 ## Installation
 
-## Build
+Clone this repository into ASDF registry and run in REPL like this:
+
+```lisp
+CL-USER> (ql:quickload :niko)
+```
+
+Or if you use [Roswell](https://github.com/roswell/roswell), simply do this in your shell:
+
+```shell-session
+$ ros install t-sin/niko
+```
 
 ## Usage
+
+In REPL, like this:
+
+```lisp
+CL-USER> (niko:start "localhost" 5000)
+Hi, I'm Niko!
+Woo server is started.
+Listening on localhost:5000.
+#S(CLACK.HANDLER::HANDLER :SERVER :WOO :ACCEPTOR #<SB-THREAD:THREAD "clack-handler-woo" RUNNING {1006D287C3}>)
+```
+
+Or you can run with Roswell script like this:
+
+```shell-session
+$ niko start localhost 5000
+Hi, I'm Niko!
+Woo server is started.
+Listening on localhost:5000.
+```
+
+## Build
+
+## Author
+
+- TANAKA Shinichi (shinichi.tanaka45@gmail.com)
 
 ## License
 
