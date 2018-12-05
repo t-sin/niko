@@ -19,8 +19,7 @@
 (defun to-slack-user-id (github-usernames)
   (let ((users (mito:select-dao 'user
                  (sxql:where (:in :github-name github-usernames)))))
-    (mapcar #'users-slack-id
-            users)))
+    (mapcar #'user-slack-id users)))
 
 (defun generate-message (verb type title url body)
   (format nil "~% You are ~a on the ~a `~a`~%~a~%~{~^> ~a~}"
