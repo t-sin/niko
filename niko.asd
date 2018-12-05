@@ -1,6 +1,6 @@
 (defsystem :niko
   :class :package-inferred-system
-  :version "0.7.0"
+  :version "0.8.0"
   :author "TANAKA Shinichi"
   :license "LLGPL"
   :description "Niko is a Slack bot; Niko tells you are mentioned on GitHub"
