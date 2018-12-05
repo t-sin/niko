@@ -36,28 +36,31 @@
   (let ((name (format nil "~a.lsx" (string-downcase (symbol-name name)))))
     (read-lsx-file (merge-pathnames name (project-root #P"views/")))))
 
-(defparameter *page-not-found* (get-view :not-found))
+(defparameter *page-map*
+  (list :template (get-view :template)
+        :not-found (get-view :not-found)
+        :root (get-view :root)
+        :user-add (get-view :user-add)
+        :user-list (get-view :user-list)))
 
 (defmethod not-found ((app (eql *app*)))
   (let ((lsx:*auto-escape* nil)
         (path (lack.request:request-path-info ningle:*request*)))
-    (render-object (funcall *page-template*
+    (render-object (funcall (getf *page-map* :template)
                             :title "Niko - Register an user"
-                            :body (funcall *page-not-found* :path path)) nil)))
-
-(defparameter *page-template* (get-view :template))
+                            :body (funcall (getf *page-map* :not-found) :path path)) nil)))
 
 (defroute ("/" :GET)
   (let ((lsx:*auto-escape* nil))
-    (render-object (funcall *page-template*
+    (render-object (funcall (getf *page-map* :template)
                             :title "Niko - Not-a-cat Slack bot"
-                            :body (funcall (get-view :root) :version (version))) nil)))
+                            :body (funcall (getf *page-map* :root) :version (version))) nil)))
 
 (defroute ("/user/add" :GET)
   (let ((lsx:*auto-escape* nil))
-    (render-object (funcall *page-template*
+    (render-object (funcall (getf *page-map* :template)
                             :title "Niko - Register an user"
-                            :body (get-view :user-add)) nil)))
+                            :body (getf *page-map* :user-add)) nil)))
 
 (defun validate-user-add (params)
   t)
@@ -76,9 +79,9 @@
 
 (defroute ("/user/list" :GET)
   (let* ((lsx:*auto-escape* nil)
-         (user-list (get-view :user-list))
-         (rendered-body (render-object (funcall user-list :users (all-users)) nil)))
-    (render-object (funcall *page-template*
+         (rendered-body (render-object
+                         (funcall (getf *page-map* :user-list) :users (all-users)) nil)))
+    (render-object (funcall (getf *page-map* :template)
                             :title "Niko - User List" :body rendered-body) nil)))
 
 (defapi ("/github/webhook" :POST)
