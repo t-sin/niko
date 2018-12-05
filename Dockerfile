@@ -15,7 +15,7 @@
 #
 # If you want to build only once, you should atatch a tag individually like this:
 # `$ sudo docker build --target niko-cl-base -t niko-cl-base .`
-FROM debian:stretch as niko-cl-base
+FROM ubuntu:18.04 as niko-cl-base
 
 # Builder requires some dependent not-Common-Lisp library, because of `ql:quickload`.
 RUN apt update && apt install -y libev-dev build-essential libcurl4-gnutls-dev autoconf git wget unzip
@@ -28,7 +28,7 @@ RUN cd roswell-master && ./bootstrap && ./configure && make && \
 #
 # If you want to build only once, do this:
 # `$ sudo docker build --target niko-runner -t niko-runner .`
-FROM debian:stretch as niko-runner
+FROM ubuntu:18.04 as niko-runner
 
 RUN apt update
 RUN apt install -y libev-dev libcurl4-gnutls-dev autoconf git
