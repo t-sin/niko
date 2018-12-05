@@ -23,7 +23,8 @@
 (in-package #:niko/views/main)
 
 (defparameter *css* (with-output-to-string (out)
-                        (with-open-file (in (merge-pathnames "style.css" (project-root #P"views/")))
+                        (with-open-file (in (merge-pathnames "style.css" (project-root #P"views/"))
+                                            :external-format :utf-8)
                           (loop
                             :for line := (read-line in nil :eof)
                             :until (eq line :eof)
