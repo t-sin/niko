@@ -31,6 +31,21 @@ $ ros install t-sin/niko
 
 ## Usage
 
+### Configuration
+
+Niko has some parameter for execution like DB password, auth tokens, etc. You can set them via environment variables described below:
+
+- `DB_HOST`: DB hostname ex) `localhost`
+- `DB_USER`: DB username
+- `DB_PASS`: DB password
+- `GITHUB_TOKEN`: GitHub auth token to get user info
+- `SLACK_TOKEN`: Slack auth token to get user info and post message
+- `SLACK_CHANNEL`: Slack channel name where Niko posts message
+
+Don't forget to set them! ;3
+
+### Running
+
 In REPL, like this:
 
 ```lisp
