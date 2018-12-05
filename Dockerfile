@@ -14,8 +14,8 @@
 ### Base image for building
 #
 # If you want to build only once, you should atatch a tag individually like this:
-# `$ sudo docker build --target cl-base -t cl-base .`
-FROM debian:stretch as cl-base
+# `$ sudo docker build --target niko-cl-base -t niko-cl-base .`
+FROM debian:stretch as niko-cl-base
 
 # Builder requires some dependent not-Common-Lisp library, because of `ql:quickload`.
 RUN apt update && apt install -y libev-dev build-essential libcurl4-gnutls-dev autoconf git wget unzip
@@ -27,8 +27,8 @@ RUN cd roswell-master && ./bootstrap && ./configure && make && \
 ### Execution environment
 #
 # If you want to build only once, do this:
-# `$ sudo docker build --target runner -t runner .`
-FROM debian:stretch as runner
+# `$ sudo docker build --target niko-runner -t niko-runner .`
+FROM debian:stretch as niko-runner
 
 RUN apt update
 RUN apt install -y libev-dev libcurl4-gnutls-dev autoconf git
@@ -37,8 +37,8 @@ RUN apt install -y libev-dev libcurl4-gnutls-dev autoconf git
 ### Dependency installed environment (to reduce build speed)
 #
 # If you want to build only once, do this:
-# `$ sudo docker build --target deps -t deps .`
-FROM cl-base as deps
+# `$ sudo docker build --target niko-deps -t niko-deps .`
+FROM niko-cl-base as niko-deps
 
 ADD ./qlfile /app/
 ADD ./qlfile.lock /app/
@@ -46,7 +46,7 @@ RUN cd /app && $HOME/.roswell/bin/qlot install
 
 
 ### Build environment
-FROM deps as builder
+FROM niko-deps as niko-builder
 
 ADD ./ /app/
 RUN cd /app && $HOME/.roswell/bin/qlot exec ros build roswell/niko.ros
@@ -55,7 +55,7 @@ RUN cd /app && $HOME/.roswell/bin/qlot exec ros build roswell/niko.ros
 ### Execution environment
 #
 # You can use this container to run the program or copy executable file built
-FROM runner
+FROM niko-runner
 
 COPY --from=builder /app/roswell/niko /usr/bin/niko
 CMD [ "/usr/bin/niko", "start", "0.0.0.0", "5000" ]
