@@ -78,7 +78,7 @@ $ cd niko/
 $ ros build ./roswell/niko.ros
 ```
 
-## Building on Docker container
+### Building on Docker container
 
 If you don't know about Roswell, try to bulid on Docker container.
 
