@@ -1,4 +1,4 @@
-# Niko - Not-a-cat Slack bot
+# 💡Niko - Not-a-cat Slack bot
 
 > "I'm not a cat!"
 
