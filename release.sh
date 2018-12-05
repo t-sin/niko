@@ -10,8 +10,7 @@ sudo docker build -t niko .
 sudo docker run -t niko:latest
 sudo docker ps -af ancestor=niko:latest -q
 sudo docker cp "$(sudo docker ps -af ancestor=niko:latest -q):/usr/bin/niko" $RELEASE_DIR
-sudo docker ps -f ancestor=niko -q | xargs sudo docker kill
-sudo docker ps -f ancestor=niko -q
+sudo docker ps -f ancestor=niko -q | xargs sudo docker rm
 
 tar cf - $RELEASE_DIR | gzip > "$RELEASE_DIR.tar.gz"
 
