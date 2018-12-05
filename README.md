@@ -67,6 +67,26 @@ Listening on localhost:5000.
 
 ## Build
 
+For simplicity and easy deployment, You can create single executable binary of Niko. This requires building feature of Roswell, but you can build Niko executable file **on Docker container**.
+
+### Simply build
+
+If you already installed Roswell, just type it:
+
+```shell
+$ cd niko/
+$ ros build ./roswell/niko.ros
+```
+
+## Building on Docker container
+
+If you don't know about Roswell, try to bulid on Docker container.
+
+```
+$ sudo docker build .
+$ sudo docker cp "$(sudo docker -q -f ancestor=niko:latest):/usr/bin/niko" .
+```
+
 ## Author
 
 - TANAKA Shinichi (shinichi.tanaka45@gmail.com)
