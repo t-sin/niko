@@ -4,6 +4,7 @@ CREATE TABLE "user" (
     "github_name" VARCHAR(256) NOT NULL,
     "slack_id" VARCHAR(256) NOT NULL,
     "slack_name" VARCHAR(256) NOT NULL,
+    "channel" VARCHAR(128) NOT NULL,
     "created_at" TIMESTAMPTZ,
     "updated_at" TIMESTAMPTZ
 );
@@ -12,4 +13,4 @@ CREATE TABLE IF NOT EXISTS "schema_migrations" (
     "version" VARCHAR(255) PRIMARY KEY,
     "applied_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
-INSERT INTO schema_migrations (version) VALUES ('20181204172504');
+INSERT INTO schema_migrations (version) VALUES ('20181208161558');
