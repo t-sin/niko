@@ -12,6 +12,10 @@
       <label for="slack-username">slack username</label>
       <input name="slack-username" />
     </div>
+    <div>
+      <label for="slack-channel">slack channel</label>
+      <input name="slack-channel" />
+    </div>
     <button>submit</button>
   </form>
 

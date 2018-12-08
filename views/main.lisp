@@ -73,7 +73,8 @@
           result)
         (progn
           (add-user (assoc* "github-username" params)
-                    (assoc* "slack-username" params))
+                    (assoc* "slack-username" params)
+                    (assoc* "slack-channel" params))
           (append-header :location "/user/list")
           (setq status-code 303)))))
 
