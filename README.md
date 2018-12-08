@@ -10,10 +10,10 @@ By a managing console, the mapping between GitHub/Slack users can be edit on the
 
 ## Requirements
 
+- libssl
 - libev
 - PostgreSQL
-    - database called `inventory`
-- SBCL
+    - a database called `inventory`
 
 ## Installation
 
