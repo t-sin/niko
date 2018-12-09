@@ -1,0 +1,40 @@
+(lambda (&key)
+<div id="main">
+  <h1>Niko - Not-a-cat Slack bot</h1>
+
+  <blockquote>
+    "I'm not a cat!"
+  </blockquote>
+
+  <section>
+    <p>
+      Niko is a Slack bot; Niko tells you are mentioned on GitHub.
+    </p>
+    <p>
+      Niko stores a mapping between GitHub users and Slack users.
+      When the GitHub users are mentioned on issues, issue comments or pull requests,
+      then Niko mentiones corresponding Slack users by a post on a Slack channel
+      specified by the envorinment variable <quote>SLACK_CHANNEL</quote>.
+    </p>
+  </section>
+
+  <ul>
+    <li><a href="/user/add">Adds user</a></li>
+    <li><a href="/user/list">Lists users</a></li>
+  </ul>
+
+  <hr />
+
+  <section>
+    <p>
+      This software <em>Niko</em> is free/libre software.
+      You can download it and modify it, because it is licensed under the
+      <a href="http://opensource.franz.com/preamble.html" title="LLGPL">Lisp Lesser GNU General Public License</a>.
+    </p>
+    <p>
+      The source code of this software is
+      <a href="https://github.com/t-sin/niko" title="Niko (GitHub)">hosted on GitHub</a>.
+      Feel free to contribute to <em>Niko</em>!
+    </p>
+  </section>
+</div>)

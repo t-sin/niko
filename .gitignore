@@ -1,4 +1,3 @@
-.DS_Store
 *.fasl
 *.dx32fsl
 *.dx64fsl
@@ -6,15 +5,6 @@
 *.lx64fsl
 *.x86f
 *~
-.#*
 
 quicklisp/
 bundle-libs/
-db/development.db
-log/*
-!log/.keep
-
-node_modules/
-
-public/assets/style.css
-public/assets/bundle.js

@@ -1,0 +1,79 @@
+#!/bin/sh
+#|-*- mode:lisp -*-|#
+#|
+exec ros -Q -L sbcl-bin -- $0 "$@"
+|#
+(progn ;;init forms
+  (ros:ensure-asdf)
+  #+quicklisp(ql:quickload '(:niko) :silent t)
+  )
+
+(defpackage :ros.script.niko.3752905480
+  (:use :cl))
+(in-package :ros.script.niko.3752905480)
+
+(defparameter +usage+ "Niko - Not-a-cat Slack bot
+usage: niko COMMAND OPTIONS...
+
+COMMAND:
+    start [ADDR] [PORT]       Start Niko with ADDR and PORT.
+
+    generate-migrations       Generate DB migration files. This command needs to run niko
+                              in the repository.
+    migrate                   Migrate. This command needs to run niko in the repository.
+    migration-status          Show migration status. This command needs to run niko in
+                              the repository.
+
+    add-user GNAME SNAME      Add user into mapping with GitHub username (GNAME)
+                              and Slack username (SNAME).
+
+    version                   Show version.
+    help                      Show this help message.
+")
+
+(defun parse-args-for-start (argv)
+  (let ((addr (string (second argv)))
+        (port (handler-bind
+                  ((condition
+                     (lambda (c)
+                       (declare (ignore c))
+                       (return-from parse-args-for-start))))
+                (parse-integer (string (third argv))))))
+    (values addr port)))
+
+(defmacro with-error (&body body)
+  `(handler-bind
+       ((condition
+          (lambda (c)
+            (format *error-output* "Error!~%~a~%"c)
+            (return-from main))))
+     (progn ,@body)))
+
+(defun main (&rest argv)
+  (if (= (length argv) 0)
+      (format *error-output* +usage+)
+      (case (intern (string-upcase (string (first argv))) :keyword)
+        (:help (format *error-output* +usage+))
+        (:version (format *error-output* "~a~%" (niko/util:version)))
+        (:add-user (let ((github-name (second argv))
+                         (slack-name (third argv)))
+                     (if (or (null github-name) (null slack-name))
+                         (format *error-output* "Specify github-name and slack-name.~%")
+                         (with-error (niko/db/models:add-user github-name slack-name)))))
+        (:generate-migrations (with-error (niko:generate-migrations)))
+        (:migrate (with-error (niko:migrate)))
+        (:migration-status (with-error (niko:migration-status)))
+        (:start (multiple-value-bind (addr port)
+                    (parse-args-for-start argv)
+                  (handler-bind
+                      ((SB-SYS:INTERACTIVE-INTERRUPT
+                         (lambda (c)
+                           (declare (ignore c))
+                           (format *error-output* "Keyboard interrupted~%")
+                           (niko:stop)
+                           (return-from main))))
+                    (niko:start (or addr "localhost") (or port 5000))
+                    (loop (sleep 1)))))
+        (t (format *error-output* "Unknown command '~a'~%" (first argv))
+           (format *error-output* +usage+)))))
+;;; vim: set ft=lisp lisp:

@@ -1,0 +1,26 @@
+(lambda ()
+<div id="main">
+
+  <h1>Register new user</h1>
+
+  <form action="" method="post">
+    <div>
+      <label for="github-username">github username</label>
+      <input name="github-username" />
+    </div>
+    <div>
+      <label for="slack-username">slack username</label>
+      <input name="slack-username" />
+    </div>
+    <div>
+      <label for="slack-channel">slack channel</label>
+      <input name="slack-channel" />
+    </div>
+    <button>submit</button>
+  </form>
+
+  <hr />
+
+  <a href="/">index</a>
+
+</div>)
