@@ -29,15 +29,15 @@
           (split-sequence:split-sequence #\newline (if (> (length body) 300) (subseq body 0 300) body))))
 
 (defun make-mapping (users)
-  (let ((default-channel (uiop:getenv "SLACK_CHANNEL"))
+  (let ((default-channel (api/channel-id (uiop:getenv "SLACK_CHANNEL")))
         (mapping))
     (flet ((to-keyword (str)
-             (intern str :keyword)))
+             (intern (or str "nil") :keyword)))
       (loop
         :for u :in users
         :do (if (null (user-channel u))
                 (push u (getf mapping (to-keyword default-channel)))
-                (push u (getf mapping (to-keyword (user-channel u))))))
+                (push u (getf mapping (to-keyword (api/channel-id (user-channel u)))))))
     mapping)))
 
 (defun post-messages (text mapping)
