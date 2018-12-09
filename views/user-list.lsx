@@ -2,7 +2,7 @@
   (let ((user-row (lambda (id github-name github-id slack-name slack-id channel)
                     <tr>
                       <td>{ id }</td>
-                      <td><a href="https://github.com/{ github-name }">{ github-name }</a></td>
+                      <td><a href={ (format nil "https://github.com/~a/" github-name) }>{ github-name }</a></td>
                       <td>{ github-id }</td>
                       <td>{ slack-name }</td>
                       <td>{ slack-id }</td>
@@ -13,8 +13,9 @@
                    (github-id (getf user :github-id))
                    (github-name (getf user :github-name))
                    (slack-id (getf user :slack-id))
-                   (slack-name (getf user :slack-name)))
-               (lsx:render-object (funcall user-row user-id github-id github-name slack-id slack-name channel)
+                   (slack-name (getf user :slack-name))
+                   (channel (getf user :channel)))
+               (lsx:render-object (funcall user-row user-id github-name github-id slack-name slack-id channel)
                                   nil))))
 <div id="main">
 
