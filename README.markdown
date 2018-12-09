@@ -1,4 +1,4 @@
-# niko
+# Niko
 
 > "I'm not a cat!"
 
