@@ -81,7 +81,8 @@ If you already installed Roswell, just type it:
 
 ```shell
 $ cd niko/
-$ ros build ./roswell/niko.ros
+$ qlot install
+$ qlot exec ros build ./roswell/niko.ros
 ```
 
 ### Building on Docker container
