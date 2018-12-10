@@ -43,9 +43,9 @@ COMMAND:
 
 (defmacro with-error (&body body)
   `(handler-bind
-       ((condition
+       ((error
           (lambda (c)
-            (format *error-output* "Error!~%~a~%"c)
+            (format t "Error!~%~a~%" c)
             (return-from main))))
      (progn ,@body)))
 
