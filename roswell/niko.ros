@@ -16,19 +16,19 @@ exec ros -Q -L sbcl-bin -- $0 "$@"
 usage: niko COMMAND OPTIONS...
 
 COMMAND:
-    start [ADDR] [PORT]       Start Niko with ADDR and PORT.
+    start [ADDR] [PORT]          Start Niko with ADDR and PORT.
 
-    generate-migrations       Generate DB migration files. This command needs to run niko
-                              in the repository.
-    migrate                   Migrate. This command needs to run niko in the repository.
-    migration-status          Show migration status. This command needs to run niko in
-                              the repository.
+    generate-migrations PATH    Generate DB migration files. This command needs to run niko
+                                in the repository.
+    migrate PATH                Migrate. This command needs to run niko in the repository.
+    migration-status PATH       Show migration status. This command needs to run niko in
+                                the repository.
 
-    add-user GNAME SNAME      Add user into mapping with GitHub username (GNAME)
-                              and Slack username (SNAME).
+    add-user GNAME SNAME        Add user into mapping with GitHub username (GNAME)
+                                and Slack username (SNAME).
 
-    version                   Show version.
-    help                      Show this help message.
+    version                     Show version.
+    help                        Show this help message.
 ")
 
 (defun parse-args-for-start (argv)
@@ -60,9 +60,9 @@ COMMAND:
                      (if (or (null github-name) (null slack-name))
                          (format *error-output* "Specify github-name and slack-name.~%")
                          (with-error (niko/db/models:add-user github-name slack-name)))))
-        (:generate-migrations (with-error (niko:generate-migrations)))
-        (:migrate (with-error (niko:migrate)))
-        (:migration-status (with-error (niko:migration-status)))
+        (:generate-migrations (with-error (niko:generate-migrations (first argv))))
+        (:migrate (with-error (niko:migrate (first argv))))
+        (:migration-status (with-error (niko:migration-status (first argv))))
         (:start (multiple-value-bind (addr port)
                     (parse-args-for-start argv)
                   (handler-bind

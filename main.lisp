@@ -44,17 +44,17 @@
 
 (defparameter *migration-pathname* (niko/util:project-root #P"db/migrations"))
 
-(defun generate-migrations ()
+(defun generate-migrations (pathname)
   (connect-db)
-  (mito:generate-migrations *migration-pathname*)
+  (mito:generate-migrations pathname)
   (mito:disconnect-toplevel))
 
-(defun migrate ()
+(defun migrate (pathname)
   (connect-db)
-  (mito:migrate *migration-pathname*)
+  (mito:migrate pathname)
   (mito:disconnect-toplevel))
 
-(defun migration-status ()
+(defun migration-status (pathname)
   (connect-db)
-  (format t "~a~%" (mito:migration-status *migration-pathname*))
+  (format t "~a~%" (mito:migration-status pathname))
   (mito:disconnect-toplevel))
