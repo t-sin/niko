@@ -1,5 +1,14 @@
 (defpackage #:niko
   (:use #:cl)
+  (:import-from #:niko/db/models
+                #:user
+                #:user-slack-id)
+  (:import-from #:niko/lib/github
+                #:all-orgrepos
+                #:all-pulls
+                #:api/review-requests)
+  (:import-from #:niko/lib/slack
+                #:api/post-message)
   (:import-from #:niko/app
                 #:*app*)
   (:import-from #:niko/views/main)
@@ -7,7 +16,8 @@
            #:stop
            #:generate-migrations
            #:migrate
-           #:migration-status))
+           #:migration-status
+           #:review-request))
 (in-package #:niko)
 
 (defparameter *app-handler* nil)
@@ -58,3 +68,26 @@
   (connect-db)
   (format t "~a~%" (mito:migration-status pathname))
   (mito:disconnect-toplevel))
+
+(defun review-request (org)
+  (let* ((repos (all-orgrepos org ""))
+         (pulls (loop
+                  :for repo :in repos
+                  :for pulls := (all-pulls org repo "open")
+                  :nconc pulls))
+         (channel (uiop:getenv "SLACK_CHANNEL"))
+         (message-template "~%Hey! You are requested review in PR `~a`~%~a~%Check it out🐱"))
+    (flet ((notify (pull requested-users)
+             (api/post-message channel
+                               (format nil message-template (getf pull :|title|) (getf pull :|html_url|))
+                               requested-users)))
+      (loop
+        :for pull :in pulls
+        :for requested := (api/review-requests org
+                                               (getf (getf (getf pull :|head|) :|repo|) :|name|)
+                                               (getf pull :|number|))
+        :for slack-users := (mapcar #'user-slack-id
+                                    (mito:select-dao 'user
+                                      (sxql:where (:in :github-name requested-users))))
+        :do (unless (null slack-users)
+              (notify pull slack-users))))))

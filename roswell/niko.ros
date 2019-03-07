@@ -27,6 +27,8 @@ COMMAND:
     add-user GNAME SNAME        Add user into mapping with GitHub username (GNAME)
                                 and Slack username (SNAME).
 
+    request-review OWNER        Check all pull request reviews and notify to reviewers.
+
     version                     Show version.
     help                        Show this help message.
 ")
