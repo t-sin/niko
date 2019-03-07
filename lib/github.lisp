@@ -102,7 +102,7 @@
                                                      ("page" . ,(format nil "~a" page)))))))
           (dex:get uri :headers `(("Authorization" . ,(format nil "token ~a" (uiop:getenv "GITHUB_TOKEN"))))))
       (declare (ignore header status ssl uri))
-      (mapcar (lambda (r) (getf r :|number|)) (jojo:parse res)))))
+      (jojo:parse res))))
 
 (defun all-pulls (owner repo state)
   (loop
