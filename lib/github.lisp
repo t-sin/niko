@@ -7,7 +7,8 @@
            #:api/orgrepos
            #:all-orgrepos
            #:api/pulls
-           #:all-pulls))
+           #:all-pulls
+           #:api/review-requests))
 (in-package #:niko/lib/github)
 
 ;;;; APIs
@@ -111,3 +112,14 @@
     :until (null pulls)
     :do (setf all-pulls (append all-pulls pulls))
     :finally (return-from all-pulls all-pulls)))
+
+(defun api/review-requests (owner repo pull)
+  (handler-bind
+      ((error (lambda (c) (format t "~s~%" c))))
+    (multiple-value-bind (res status header uri ssl)
+        (let ((uri (format nil "~a/repos/~a/~a/pulls/~a/requested_reviewers"
+                           "https://api.github.com" owner repo pull)))
+          (dex:get uri :headers `(("Authorization" . ,(format nil "token ~a" (uiop:getenv "GITHUB_TOKEN"))))))
+      (declare (ignore header status ssl uri))
+      (mapcar (lambda (u) (getf u :|login|))
+              (getf (jojo:parse res) :|users|)))))
