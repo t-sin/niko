@@ -17,7 +17,8 @@
            #:generate-migrations
            #:migrate
            #:migration-status
-           #:review-request))
+           #:request-review
+           #:request-all-reviews))
 (in-package #:niko)
 
 (defparameter *app-handler* nil)
@@ -69,25 +70,26 @@
   (format t "~a~%" (mito:migration-status pathname))
   (mito:disconnect-toplevel))
 
-(defun review-request (org)
-  (let* ((repos (all-orgrepos org ""))
-         (pulls (loop
-                  :for repo :in repos
-                  :for pulls := (all-pulls org repo "open")
-                  :nconc pulls))
-         (channel (uiop:getenv "SLACK_CHANNEL"))
-         (message-template "~%Hey! You are requested review in PR `~a`~%~a~%Check it out🐱"))
-    (flet ((notify (pull requested-users)
-             (api/post-message channel
-                               (format nil message-template (getf pull :|title|) (getf pull :|html_url|))
-                               requested-users)))
-      (loop
-        :for pull :in pulls
-        :for requested := (api/review-requests org
-                                               (getf (getf (getf pull :|head|) :|repo|) :|name|)
-                                               (getf pull :|number|))
-        :for slack-users := (mapcar #'user-slack-id
-                                    (mito:select-dao 'user
-                                      (sxql:where (:in :github-name requested-users))))
-        :do (unless (null slack-users)
-              (notify pull slack-users))))))
+(defun %notify (pull reviewers)
+  (let ((message-template "~%Hey! You are requested review in PR `~a`~%~a~%Check it out🐱"))
+    (api/post-message (uiop:getenv "SLACK_CHANNEL")
+                      (format nil message-template (getf pull :|title|) (getf pull :|html_url|))
+                      reviewers)))
+
+(defun request-review (org repo)
+  (let ((pulls (all-pulls org repo "open")))
+    (loop
+      :for pull :in pulls
+      :for requested := (api/review-requests org (getf (getf (getf pull :|head|) :|repo|) :|name|)
+                                             (getf pull :|number|))
+      :do (unless (null requested)
+            (let ((slack-users (mapcar #'user-slack-id
+                                       (mito:select-dao 'user
+                                         (sxql:where (:in :github-name requested))))))
+              (unless (null slack-users)
+                (%notify pull slack-users)))))))
+
+(defun request-all-reviews (org)
+  (loop
+    :for repo :in (all-orgrepos org "all")
+    :do (request-review org repo)))
