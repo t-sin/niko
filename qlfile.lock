@@ -56,6 +56,10 @@
   :version "git-1adfc5590deb9d241443f63dfa5270fd937c503a"
   :remote-url "https://github.com/fukamachi/mito"
   :ref "1adfc5590deb9d241443f63dfa5270fd937c503a"))
+("cl-redis" .
+ (:class qlot.source.ql:source-ql
+  :initargs (:project-name "cl-redis" :distribution "http://beta.quicklisp.org/dist/quicklisp.txt" :%version :latest)
+  :version "ql-2019-08-13"))
 ("trivial-mimes" .
  (:class qlot.source.ql:source-ql
   :initargs (:project-name "trivial-mimes" :distribution "http://beta.quicklisp.org/dist/quicklisp.txt" :%version :latest)

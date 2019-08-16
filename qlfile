@@ -13,6 +13,8 @@ git cl-dbi https://github.com/fukamachi/cl-dbi
 git sxql https://github.com/fukamachi/sxql
 git mito https://github.com/fukamachi/mito
 
+ql cl-redis :latest
+
 ql trivial-mimes :latest
 
 git woo https://github.com/fukamachi/woo
