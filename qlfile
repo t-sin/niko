@@ -17,6 +17,7 @@ ql cl-redis :latest
 
 ql trivial-mimes :latest
 
+git cl+ssl https://github.com/cl-plus-ssl/cl-plus-ssl
 git woo https://github.com/fukamachi/woo
 git clack https://github.com/fukamachi/clack
 git ningle https://github.com/fukamachi/ningle
