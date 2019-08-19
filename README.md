@@ -14,6 +14,7 @@ By a managing console, the mapping between GitHub/Slack users can be edit on the
 - libev
 - PostgreSQL
     - a database called `inventory`
+- Redis
 
 ## Installation
 
@@ -38,6 +39,8 @@ Niko has some parameter for execution like DB password, auth tokens, etc. You ca
 - `DB_HOST`: DB hostname ex) `localhost`
 - `DB_USER`: DB username
 - `DB_PASS`: DB password
+- `REDIS_HOST`: Redis hostname
+- `REDIS_PORT`: Redis port
 - `GITHUB_TOKEN`: GitHub auth token to get user info
 - `SLACK_TOKEN`: Slack auth token to get user info and post message
 - `SLACK_CHANNEL`: Slack channel name where Niko posts message
