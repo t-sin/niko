@@ -18,6 +18,8 @@
                "dbd-postgres"
                "mito"
 
+               "cl-redis"
+
                "dexador"
                "jonathan"
 
