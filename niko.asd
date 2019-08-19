@@ -18,7 +18,11 @@
                "dbd-postgres"
                "mito"
 
+               "cl-redis"
+
                "dexador"
                "jonathan"
 
                "niko/main"))
+
+(register-system-packages "cl-redis" '(:redis))

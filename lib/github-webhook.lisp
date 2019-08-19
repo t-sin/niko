@@ -10,6 +10,10 @@
                 #:user-channel)
   (:import-from #:niko/util
                 #:assoc*)
+  (:import-from #:redis
+                #:red-get
+                #:red-set
+                #:red-expire)
   (:import-from #:jonathan
                 #:parse)
   (:export #:webhook))
@@ -51,15 +55,24 @@
                       keys))
      ,@body))
 
+(defmacro unless-key-exists (key &body body)
+  (let (($key (gensym)))
+    `(let ((,$key ,key))
+       (when (null (red-get ,$key))
+         (red-set ,$key "nya~ (processed)")
+         (red-expire ,$key 30)
+         ,@body))))
+
 (defun handle-issues (params)
   (with-payload (payload (action issue assignee))
     (let ((mentioned (remove-duplicates (all-mentions-from (getf issue :|body|))
                                         :test #'string=)))
       (if (and (string= action "assigned") assignee)
           (when assignee
-            (post-messages (generate-message "assigned" "issue" (getf issue :|title|)
-                                             (getf issue :|html_url|) (getf issue :|body|))
-                           (make-mapping (to-users (list (getf assignee :|login|))))))
+            (unless-key-exists (format nil "issues:~a" (getf issue :|id|))
+              (post-messages (generate-message "assigned" "issue" (getf issue :|title|)
+                                               (getf issue :|html_url|) (getf issue :|body|))
+                             (make-mapping (to-users (list (getf assignee :|login|)))))))
           (when (and (string= action "opened") mentioned)
             (post-messages (generate-message "commented" "issue" (getf issue :|title|)
                                              (getf issue :|html_url|) (getf issue :|body|))
@@ -82,15 +95,17 @@
                                         :test #'string=)))
       (cond ((and (string= action "assigned") assignee)
              (when assignee
-               (post-messages (generate-message "assigned" "Pull-Request" (getf pull_request :|title|)
-                                                (getf pull_request :|html_url|) (getf pull_request :|body|))
-                              (make-mapping (to-users (list (getf assignee :|login|)))))))
+               (unless-key-exists (format nil "pulls:~a" (getf pull_request :|id|))
+                 (post-messages (generate-message "assigned" "Pull-Request" (getf pull_request :|title|)
+                                                  (getf pull_request :|html_url|) (getf pull_request :|body|))
+                                (make-mapping (to-users (list (getf assignee :|login|))))))))
             ((and (string= action "review_requested") (getf pull_request :|requested_reviewers|))
              (let ((reviewers (mapcar (lambda (rev) (getf rev :|login|))
                                       (getf pull_request :|requested_reviewers|))))
-               (post-messages (generate-message "assigned" "Pull-Request" (getf pull_request :|title|)
-                                                (getf pull_request :|html_url|) (getf pull_request :|body|))
-                              (make-mapping (to-users reviewers)))))
+               (unless-key-exists (format nil "pulls:reivew~a" (getf pull_request :|id|)))
+                 (post-messages (generate-message "assigned" "Pull-Request" (getf pull_request :|title|)
+                                                  (getf pull_request :|html_url|) (getf pull_request :|body|))
+                                (make-mapping (to-users reviewers)))))
             ((and (string= action "opened") mentioned)
              (post-messages (generate-message "commented" "Pull-Request" (getf pull_request :|title|)
                                               (getf pull_request :|html_url|) (getf pull_request :|body|))
