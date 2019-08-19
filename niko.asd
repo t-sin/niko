@@ -24,3 +24,5 @@
                "jonathan"
 
                "niko/main"))
+
+(register-system-packages "cl-redis" '(:redis))

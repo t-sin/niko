@@ -19,6 +19,10 @@
                          :username (uiop:getenv "DB_USER")
                          :password (uiop:getenv "DB_PASS")))
 
+(defun connect-redis ()
+  (redis:connect :host (uiop:getenv "REDIS_HOST")
+                 :port (parse-integer (uiop:getenv "REDIS_PORT"))))
+
 (defun start (&optional (address "localhost") (port 5000))
   (format t "Hi, I'm Niko!~%")
   (handler-bind ((woo.ev.condition:os-error
@@ -29,6 +33,7 @@
     ;; now cannot handle other thread's condition
     ;; because of it, some conditions are not handled; e.g. port already used
     (connect-db)
+    (connect-redis)
     (setf *app-handler*
           (clack:clackup *app*
                          :server :woo
@@ -39,6 +44,7 @@
 (defun stop ()
   (format t "Good night...~%")
   (clack:stop *app-handler*)
+  (redis:disconnect)
   (mito:disconnect-toplevel)
   (setf *app-handler* nil))
 
