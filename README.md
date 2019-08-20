@@ -15,6 +15,7 @@ By a managing console, the mapping between GitHub/Slack users can be edit on the
 - PostgreSQL
     - a database called `inventory`
 - Redis
+    - it should be configured as `notify-keyspace-events Ex`
 
 ## Installation
 
