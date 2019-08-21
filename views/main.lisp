@@ -2,25 +2,24 @@
   (:use #:cl #:lsx)
   (:import-from #:ningle
                 #:not-found)
-  (:import-from #:niko/app
-                #:*app*
+  (:import-from #:niko/db/models
+                #:to-plist
+                #:all-users
+                #:add-user)
+  (:import-from #:niko/util
+                #:assoc*
+                #:project-root
+                #:version
                 #:defroute
                 #:defapi
                 #:append-header
                 #:params
                 #:status-code)
-  (:import-from #:niko/db/models
-                #:to-plist
-                #:all-users
-                #:add-user)
-  (:import-from #:niko/lib/github-webhook
-                #:webhook)
-  (:import-from #:niko/util
-                #:assoc*
-                #:project-root
-                #:version)
-  (:export #:view-template))
+  (:export #:*app*
+           #:view-template))
 (in-package #:niko/views/main)
+
+(defparameter *app* (make-instance 'ningle:<app>))
 
 (defparameter *css* (with-output-to-string (out)
                         (with-open-file (in (merge-pathnames "style.css" (project-root #P"views/"))
@@ -30,7 +29,9 @@
                             :until (eq line :eof)
                             :do (format out "~a~%" line)))))
 
-(defroute ("/style.css" :GET) *css*)
+(defroute ("/style.css" :GET)
+  (append-header :content-type "text/css")
+  *css*)
 
 (defun get-view (name)
   (let ((name (format nil "~a.lsx" (string-downcase (symbol-name name)))))
@@ -86,6 +87,3 @@
                             :title "Niko - User List"
                             :body rendered-body
                             :version (version)) nil)))
-
-(defapi ("/github/webhook" :POST)
-  (webhook params))

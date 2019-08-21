@@ -1,5 +1,9 @@
-(defpackage #:niko/lib/github-webhook
+(defpackage #:niko/webhook
   (:use #:cl)
+  (:import-from #:niko/db/models
+                #:to-plist
+                #:all-users
+                #:add-user)
   (:import-from #:niko/lib/slack
                 #:api/channel-id
                 #:api/user-ids
@@ -9,11 +13,14 @@
                 #:user-slack-id
                 #:user-channel)
   (:import-from #:niko/util
-                #:assoc*)
- (:import-from #:jonathan
+                #:assoc*
+                #:defapi)
+  (:import-from #:jonathan
                 #:parse)
-  (:export #:webhook))
-(in-package #:niko/lib/github-webhook)
+  (:export #:*app*))
+(in-package #:niko/webhook)
+
+(defparameter *app* (make-instance 'ningle:<app>))
 
 (defun all-mentions-from (text)
   (mapcar (lambda (s) (subseq s 1))
@@ -154,3 +161,6 @@
             ((string= event-type "pull_request_review_comment") (handle-pull-request-review-comment params))
             ((string= event-type "issue_comment") (handle-issue-comment params))
             (t (format t "do nothing anymore~%"))))))
+
+(defapi ("/github/webhook" :POST)
+  (webhook params))
