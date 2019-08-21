@@ -9,7 +9,9 @@
 
                "cffi"
                "woo"
+               "hunchentoot"
                "clack"
+               "clack-handler-hunchentoot"
                "ningle"
                "lsx"
 

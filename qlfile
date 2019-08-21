@@ -14,8 +14,8 @@ git sxql https://github.com/fukamachi/sxql
 git mito https://github.com/fukamachi/mito
 
 ql cl-redis :latest
-
 ql trivial-mimes :latest
+ql hunchentoot :latest
 
 git cl+ssl https://github.com/cl-plus-ssl/cl-plus-ssl
 git woo https://github.com/fukamachi/woo

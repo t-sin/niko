@@ -64,6 +64,10 @@
  (:class qlot.source.ql:source-ql
   :initargs (:project-name "trivial-mimes" :distribution "http://beta.quicklisp.org/dist/quicklisp.txt" :%version :latest)
   :version "ql-2018-10-18"))
+("hunchentoot" .
+ (:class qlot.source.ql:source-ql
+  :initargs (:project-name "hunchentoot" :distribution "http://beta.quicklisp.org/dist/quicklisp.txt" :%version :latest)
+  :version "ql-2019-08-13"))
 ("cl+ssl" .
  (:class qlot.source.git:source-git
   :initargs (:project-name "cl+ssl" :remote-url "https://github.com/cl-plus-ssl/cl-plus-ssl")
