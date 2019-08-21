@@ -71,7 +71,7 @@ Listening on localhost:5000.
 
 ## How to Use
 
-First, you have to add a pair of users (GitHub/Slack). After `niko start`, you can access Niko console via HTTP, by default `localhost:5000/`. On the path `/user/add`, you can add the pair.
+First, you have to add a pair of users (GitHub/Slack). After `niko start`, you can access Niko console via HTTP, by default `localhost:5001/`. On the path `/user/add`, you can add the pair.
 
 Second, you have to set a webhook on GitHub. Expose Niko to the internet, and a path for the webhook is `/github/webhook`. You have to set the path to the Settings->Webhooks page on a *repository*/*organization* you want to notify.
 
