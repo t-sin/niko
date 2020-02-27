@@ -1,0 +1,38 @@
+version: '3.7'
+services:
+  db:
+    restart: always
+    image: postgres
+    container_name: niko_db
+    volumes:
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: inventory
+
+  redis:
+    restart: always
+    image: redis
+    container_name: niko_redis
+
+  niko:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: niko
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    environment:
+      GITHUB_TOKEN: xxxx
+      SLACK_TOKEN: yyyyy
+      SLACK_CHANNEL: niko-notification
+      DB_HOST: db
+      DB_USER: postgres
+      DB_PASS: password
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    links:
+      - db
+      - redis
+
