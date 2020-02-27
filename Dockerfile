@@ -59,4 +59,5 @@ FROM niko-runner
 
 COPY --from=niko-builder /app/roswell/niko /usr/bin/niko
 CMD [ "/usr/bin/niko", "version" ]
+CMD [ "/usr/bin/niko", "start", "localhost", "5000" ]
 EXPOSE 5000
