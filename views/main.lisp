@@ -77,7 +77,8 @@
                     (assoc* "slack-username" params)
                     (assoc* "slack-channel" params))
           (append-header :location "/user/list")
-          (setq status-code 303)))))
+          (setq status-code 303)
+          "/user/list"))))
 
 (defroute ("/user/list" :GET)
   (let* ((lsx:*auto-escape* nil)
